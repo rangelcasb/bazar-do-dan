@@ -303,6 +303,80 @@
             box-shadow: 0 6px 24px rgba(230, 57, 70, 0.4);
         }
 
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #25D366;
+            color: #fff;
+            padding: 16px;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 28px;
+            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease;
+            z-index: 98;
+            border: none;
+            text-decoration: none;
+        }
+
+        .whatsapp-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
+        }
+
+        .whatsapp-menu {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            background: #1a1a1a;
+            border: 2px solid #25D366;
+            border-radius: 12px;
+            padding: 10px;
+            z-index: 98;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.2);
+        }
+
+        .whatsapp-menu-item {
+            background: #0a0a0a;
+            color: #25D366;
+            padding: 12px 16px;
+            border: 1px solid #25D366;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .whatsapp-menu-item:hover {
+            background: #25D366;
+            color: #fff;
+        }
+
+        @media (max-width: 480px) {
+            .whatsapp-button {
+                bottom: 15px;
+                left: 15px;
+                width: 56px;
+                height: 56px;
+                font-size: 24px;
+            }
+            .whatsapp-menu {
+                bottom: 90px;
+                left: 15px;
+            }
+        }
+
         @media (max-width: 480px) {
             .cart-indicator {
                 padding: 12px 16px;
@@ -432,6 +506,38 @@
 
     <div class="cart-indicator" id="cartIndicator" style="display: none;">
         <span id="cartIndicatorText">Carrinho: 0 itens</span>
+    </div>
+
+    <!-- Botão WhatsApp Flutuante -->
+    <button class="whatsapp-button" onclick="toggleWhatsappMenu()" title="Menu WhatsApp">💬</button>
+
+    <!-- Menu WhatsApp Avançado -->
+    <div id="whatsappMenu" class="whatsapp-menu" style="display: none;">
+        <div class="whatsapp-menu-item" onclick="shareFullCatalog()">📚 Catálogo Completo</div>
+        <div class="whatsapp-menu-item" onclick="shareProductList()">🛒 Enviar Carrinho</div>
+        <div class="whatsapp-menu-item" onclick="openDirectChat()">💬 Chat Direto</div>
+    </div>
+
+    <!-- Modal WhatsApp Avançado -->
+    <div id="whatsappModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: #1a1a1a; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%; border: 2px solid #FFD700;">
+            <h2 style="color: #FFD700; margin-bottom: 20px;">Enviar via WhatsApp</h2>
+
+            <div style="margin-bottom: 15px;">
+                <label style="color: #fff; display: block; margin-bottom: 8px;">📱 Número do cliente (opcional)</label>
+                <input type="text" id="customerPhone" placeholder="Digite o número com DDD" style="width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="color: #fff; display: block; margin-bottom: 8px;">💬 Mensagem personalizada</label>
+                <textarea id="customMessage" placeholder="Adicione uma mensagem pessoal..." style="width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box; min-height: 100px; resize: vertical;"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button onclick="sendAdvancedWhatsApp()" style="flex: 1; padding: 12px; background: #25D366; color: #fff; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">✓ Enviar</button>
+                <button onclick="document.getElementById('whatsappModal').style.display = 'none';" style="flex: 1; padding: 12px; background: #333; color: #fff; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">✕ Cancelar</button>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -627,10 +733,108 @@
         }
 
         function shareWhatsApp(name, price) {
-            const text = `Olá! Vi esse produto no Bazar do Dan:\n\n${name}\nR$ ${price.toFixed(2)}\n\nTem interesse?`;
-            const encoded = encodeURIComponent(text);
+            // Abre modal para envio avançado
+            window.currentProduct = { name, price };
+            document.getElementById('whatsappModal').style.display = 'flex';
+        }
+
+        function sendAdvancedWhatsApp() {
+            const product = window.currentProduct;
+            const customerPhone = document.getElementById('customerPhone').value.trim();
+            const customMessage = document.getElementById('customMessage').value.trim();
+
+            let message = `🎆 *${product.name}*\n`;
+            message += `💰 R$ ${product.price.toFixed(2)}\n\n`;
+
+            if (customMessage) {
+                message += `📝 ${customMessage}\n\n`;
+            }
+
+            message += `👉 Gostaria de mais informações ou fazer o pedido!\n`;
+            message += `Catálogo completo: https://rangelcasb.github.io/bazar-do-dan`;
+
+            const encoded = encodeURIComponent(message);
+
+            // Se foi fornecido número do cliente, envia para ele
+            // Senão envia para o padrão
+            const targetNumber = customerPhone || whatsappNumber;
+            const apiUrl = `https://wa.me/${targetNumber}?text=${encoded}`;
+
+            window.open(apiUrl, '_blank');
+
+            // Fecha modal
+            document.getElementById('whatsappModal').style.display = 'none';
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('customMessage').value = '';
+        }
+
+        function shareProductList() {
+            // Compartilha lista de produtos do carrinho
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+
+            let message = `🛒 *LISTA DE PRODUTOS - Bazar do Dan*\n\n`;
+
+            cart.forEach((item, index) => {
+                message += `${index + 1}. *${item.name}*\n`;
+                message += `   Qtd: ${item.quantity}x | R$ ${item.preco.toFixed(2)} cada\n`;
+                message += `   Subtotal: R$ ${(item.preco * item.quantity).toFixed(2)}\n\n`;
+            });
+
+            const total = cart.reduce((acc, item) => acc + (item.preco * item.quantity), 0);
+            message += `💵 *TOTAL: R$ ${total.toFixed(2)}*\n\n`;
+            message += `📍 Bazar do Dan - Maceió, AL\n`;
+            message += `🌐 www.bazardodan.com.br`;
+
+            const encoded = encodeURIComponent(message);
             window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, '_blank');
         }
+
+        function shareFullCatalog() {
+            // Compartilha catálogo completo resumido
+            let message = `📚 *CATÁLOGO COMPLETO - Bazar do Dan*\n\n`;
+
+            const categories = ['Estalos', 'Bombas', 'Traques', 'Chuvinhas', 'Aviões', 'Especiais'];
+
+            categories.forEach(cat => {
+                const items = products.filter(p => p.categoria === cat);
+                message += `\n${cat.toUpperCase()} (${items.length} itens)\n`;
+                items.slice(0, 3).forEach(item => {
+                    message += `  • ${item.name} - R$ ${item.preco.toFixed(2)}\n`;
+                });
+                if (items.length > 3) {
+                    message += `  ... e mais ${items.length - 3} produtos\n`;
+                }
+            });
+
+            message += `\n\n📱 Veja o catálogo completo: https://rangelcasb.github.io/bazar-do-dan`;
+
+            const encoded = encodeURIComponent(message);
+            window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, '_blank');
+        }
+
+        function openDirectChat() {
+            // Abre chat direto no WhatsApp
+            const greeting = `Olá! Gostaria de informações sobre os produtos do Bazar do Dan 👋`;
+            const encoded = encodeURIComponent(greeting);
+            window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, '_blank');
+        }
+
+        function toggleWhatsappMenu() {
+            const menu = document.getElementById('whatsappMenu');
+            menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('whatsappMenu');
+            const button = event.target.closest('.whatsapp-button');
+            if (!button && !event.target.closest('.whatsapp-menu')) {
+                menu.style.display = 'none';
+            }
+        });
 
         function updateCartDisplay() {
             const count = cart.reduce((acc, item) => acc + item.quantity, 0);
