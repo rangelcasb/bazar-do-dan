@@ -1,0 +1,48 @@
+name: 🖼️ Auto Upload de Imagens
+
+on:
+  push:
+    paths:
+      - 'images/**'
+      - '.github/workflows/auto-upload-images.yml'
+  workflow_dispatch:
+
+jobs:
+  sync-images:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout do repositório
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Verificar mudanças em imagens
+        id: check
+        run: |
+          if git diff --quiet HEAD~1 images/ 2>/dev/null; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 📸 Processar imagens
+        if: steps.check.outputs.has_changes == 'true'
+        run: |
+          echo "✅ Imagens detectadas!"
+          ls -lh images/ | grep -E "\.(jpg|jpeg|png|gif)$" || echo "Nenhuma imagem encontrada"
+
+      - name: ✨ Commit automático
+        if: steps.check.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "🤖 Bot Auto Upload"
+          git add images/
+          git commit -m "🖼️ Auto: Atualizar imagens do catálogo" --allow-empty || echo "Sem mudanças para commit"
+
+      - name: 🚀 Push para o repositório
+        if: steps.check.outputs.has_changes == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
