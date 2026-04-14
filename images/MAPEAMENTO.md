@@ -1,160 +1,147 @@
 # 📸 Mapeamento de Imagens - Bazar do Dan
 
+**APENAS PRODUTOS REAIS DO CATÁLOGO PDF**
+
 **Como nomear as imagens:** Use o formato `XXX-nome-do-produto.jpg`
 
-Exemplo: Se é o produto ID 1, salve como `001-estalo-alianca.jpg`
+Exemplo: Produto ID 1 → `001-estalo-alianca.jpg`
 
 ---
 
-## ESTALOS (001-020)
+## ESTALOS (001-006)
 
 | ID | Nome do Produto | Nome do Arquivo |
 |---|---|---|
 | 1 | Estalo Bebê Aliança | `001-estalo-alianca.jpg` |
-| 2 | Estalo Bebê Aliança Premium | `002-estalo-alianca-premium.jpg` |
-| 3 | Mariposa | `003-mariposa.jpg` |
-| 4 | Estalo Bebê Guarany | `004-estalo-guarany.jpg` |
-| 5 | Estalo Gigante Aliança | `005-estalo-gigante-alianca.jpg` |
-| 6 | Estalo Palito Dourado | `006-estalo-palito-dourado.jpg` |
-| 7 | Estalo Rosa Choque | `007-estalo-rosa-choque.jpg` |
-| 8 | Estalo Neon Brilhante | `008-estalo-neon-brilhante.jpg` |
-| 9 | Mini Estalo Colorido | `009-mini-estalo-colorido.jpg` |
-| 10 | Estalo Duplo Safira | `010-estalo-duplo-safira.jpg` |
-| 11 | Mariposa Cristal | `011-mariposa-cristal.jpg` |
-| 12 | Estalo Metalizado Ouro | `012-estalo-metalizado-ouro.jpg` |
-| 13 | Estalo Flash Branco | `013-estalo-flash-branco.jpg` |
-| 14 | Estalo Trêmolo | `014-estalo-tremolo.jpg` |
-| 15 | Estalo Aliança Extra | `015-estalo-alianca-extra.jpg` |
-| 16 | Estalo Sonic | `016-estalo-sonic.jpg` |
-| 17 | Estalo Dinamite Mini | `017-estalo-dinamite-mini.jpg` |
-| 18 | Mariposa Gigante | `018-mariposa-gigante.jpg` |
-| 19 | Estalo Cascata | `019-estalo-cascata.jpg` |
-| 20 | Estalo Triplo Safira | `020-estalo-triplo-safira.jpg` |
+| 2 | Estalo Bebê Aliança | `002-estalo-alianca.jpg` |
+| 3 | Estalo bebe | `003-estalo-bebe.jpg` |
+| 4 | Estalo Bebê Aliada Guarany | `004-estalo-aliada-guarany.jpg` |
+| 5 | Mariposa | `005-mariposa.jpg` |
+| 6 | Bengalinhas | `006-bengalinhas.jpg` |
 
 ---
 
-## BOMBAS (021-040)
+## BOMBAS (007-013)
 
 | ID | Nome do Produto | Nome do Arquivo |
 |---|---|---|
-| 21 | Bomba Nº1 | `021-bomba-n1.jpg` |
-| 22 | Bomba Nº2 | `022-bomba-n2.jpg` |
-| 23 | Bomba Nº3 | `023-bomba-n3.jpg` |
-| 24 | Bomba Nº4 | `024-bomba-n4.jpg` |
-| 25 | Bomba Nº5 | `025-bomba-n5.jpg` |
-| 26 | Bomba Nº6 | `026-bomba-n6.jpg` |
-| 27 | Bomba Grande | `027-bomba-grande.jpg` |
-| 28 | Bomba Gigante | `028-bomba-gigante.jpg` |
-| 29 | Bomba Cintilante | `029-bomba-cintilante.jpg` |
-| 30 | Bomba Colorida | `030-bomba-colorida.jpg` |
-| 31 | Bomba Estourada | `031-bomba-estourada.jpg` |
-| 32 | Bomba Mini Explosão | `032-bomba-mini-explosao.jpg` |
-| 33 | Bomba Dupla | `033-bomba-dupla.jpg` |
-| 34 | Bomba Tripla | `034-bomba-tripla.jpg` |
-| 35 | Bomba Com Estalo | `035-bomba-com-estalo.jpg` |
-| 36 | Bomba Buscapé | `036-bomba-buscape.jpg` |
-| 37 | Bomba Solta Pólvora | `037-bomba-solta-polvora.jpg` |
-| 38 | Bomba Dura | `038-bomba-dura.jpg` |
-| 39 | Bomba Potência Máxima | `039-bomba-potencia-maxima.jpg` |
-| 40 | Bomba Especial Maceió | `040-bomba-especial-maceio.jpg` |
+| 7 | Bomba Nº0 | `007-bomba-n0.jpg` |
+| 8 | Bomba Nº1 | `008-bomba-n1.jpg` |
+| 9 | Bomba Nº2 | `009-bomba-n2.jpg` |
+| 10 | Bomba Nº3 | `010-bomba-n3.jpg` |
+| 11 | Bomba Nº1 | `011-bomba-n1-20un.jpg` |
+| 12 | Bomba Nº4 | `012-bomba-n4.jpg` |
+| 13 | Bomba charuto | `013-bomba-charuto.jpg` |
 
 ---
 
-## TRAQUES (041-060)
+## TRAQUES (014-025)
 
 | ID | Nome do Produto | Nome do Arquivo |
 |---|---|---|
-| 41 | Rajadinha | `041-rajadinha.jpg` |
-| 42 | Caneta Rojãozinho | `042-caneta-rojaozinho.jpg` |
-| 43 | Caneta de Fogo | `043-caneta-de-fogo.jpg` |
-| 44 | Caneta Estrelinha | `044-caneta-estrelinha.jpg` |
-| 45 | Caneta Dourada | `045-caneta-dourada.jpg` |
-| 46 | Caneta Prateada | `046-caneta-prateada.jpg` |
-| 47 | Vela Cintilante | `047-vela-cintilante.jpg` |
-| 48 | Vela de Bolo Colorida | `048-vela-de-bolo-colorida.jpg` |
-| 49 | Vela Mágica | `049-vela-magica.jpg` |
-| 50 | Vela Permanente | `050-vela-permanente.jpg` |
-| 51 | Lenço de Seda Colorido | `051-lenco-de-seda-colorido.jpg` |
-| 52 | Confete Brilhante | `052-confete-brilhante.jpg` |
-| 53 | Lança Confete | `053-lanca-confete.jpg` |
-| 54 | Popô Colorido | `054-popo-colorido.jpg` |
-| 55 | Traque Mini | `055-traque-mini.jpg` |
-| 56 | Traque Alegria | `056-traque-alegria.jpg` |
-| 57 | Traque Festa | `057-traque-festa.jpg` |
-| 58 | Traque Celebração | `058-traque-celebracao.jpg` |
-| 59 | Foguete de Papel | `059-foguete-de-papel.jpg` |
-| 60 | Foguete Luminoso | `060-foguete-luminoso.jpg` |
+| 14 | Rajadinho | `014-rajadinho-4.jpg` |
+| 15 | Rajadinho | `015-rajadinho-5.jpg` |
+| 16 | Caneta Rojãozinho | `016-caneta-rojaozinho.jpg` |
+| 17 | Apito Vara | `017-apito-vara.jpg` |
+| 18 | Vela magnesiana | `018-vela-magnesiana-10.jpg` |
+| 19 | Vela magnesiana | `019-vela-magnesiana-12.jpg` |
+| 20 | Traque Gurizinho C/20 | `020-traque-gurizinho.jpg` |
+| 21 | Traque Guri C/10 | `021-traque-guri.jpg` |
+| 22 | Traque Redondo C/10 | `022-traque-redondo.jpg` |
+| 23 | 3 Tiros | `023-3-tiros.jpg` |
+| 24 | 3x1 | `024-3x1.jpg` |
+| 25 | 12x1 | `025-12x1.jpg` |
 
 ---
 
-## CHUVINHAS (061-075)
+## CHUVINHAS (026-032)
 
 | ID | Nome do Produto | Nome do Arquivo |
 |---|---|---|
-| 61 | Bengalinhas | `061-bengalinhas.jpg` |
-| 62 | Chuvinha P/M/G | `062-chuvinha-pmg.jpg` |
-| 63 | Chuvinha Colorida | `063-chuvinha-colorida.jpg` |
-| 64 | Chuvinha Dourada | `064-chuvinha-dourada.jpg` |
-| 65 | Chuvinha Cintilante | `065-chuvinha-cintilante.jpg` |
-| 66 | Chuvinha de Bolo | `066-chuvinha-de-bolo.jpg` |
-| 67 | Chuvinha Mini | `067-chuvinha-mini.jpg` |
-| 68 | Chuvinha Grande | `068-chuvinha-grande.jpg` |
-| 69 | Chuvinha Premium | `069-chuvinha-premium.jpg` |
-| 70 | Vela de Chuvinha | `070-vela-de-chuvinha.jpg` |
-| 71 | Chuvinha Festa | `071-chuvinha-festa.jpg` |
-| 72 | Chuvinha Alegria | `072-chuvinha-alegria.jpg` |
-| 73 | Chuvinha Cascata | `073-chuvinha-cascata.jpg` |
-| 74 | Chuvinha Brilhante | `074-chuvinha-brilhante.jpg` |
-| 75 | Chuvinha Especial | `075-chuvinha-especial.jpg` |
+| 26 | Chuvinha P | `026-chuvinha-p.jpg` |
+| 27 | Chuvinha M | `027-chuvinha-m.jpg` |
+| 28 | Chuvinha G | `028-chuvinha-g.jpg` |
+| 29 | Chuveirão | `029-chuveirão.jpg` |
+| 30 | Chuvinha P/M/G | `030-chuvinha-pmg.jpg` |
+| 31 | Chuva de prata | `031-chuva-prata.jpg` |
+| 32 | Chuva Colorida | `032-chuva-colorida.jpg` |
 
 ---
 
-## AVIÕES (076-085)
+## AVIÕES (033-040)
 
 | ID | Nome do Produto | Nome do Arquivo |
 |---|---|---|
-| 76 | Abelinha | `076-abelinha.jpg` |
-| 77 | Libélula | `077-libelula.jpg` |
-| 78 | Borboleta Voadora | `078-borboleta-voadora.jpg` |
-| 79 | Pássaro Colorido | `079-passaro-colorido.jpg` |
-| 80 | Avião de Papel Fogo | `080-aviao-de-papel-fogo.jpg` |
-| 81 | Abelinha Gigante | `081-abelinha-gigante.jpg` |
-| 82 | Libélula Premium | `082-libelula-premium.jpg` |
-| 83 | Inseto Fogo | `083-inseto-fogo.jpg` |
-| 84 | Mosca Brilhante | `084-mosca-brilhante.jpg` |
-| 85 | Joaninha Colorida | `085-joaninha-colorida.jpg` |
+| 33 | Abelinha | `033-abelinha-8.jpg` |
+| 34 | Abelinha | `034-abelinha-12.jpg` |
+| 35 | Libélula | `035-libelula.jpg` |
+| 36 | Avião Caramuro | `036-aviao-caramuro.jpg` |
+| 37 | Avião Patrulhas | `037-aviao-patrulhas.jpg` |
+| 38 | Avião Guerra | `038-aviao-guerra.jpg` |
+| 39 | Avião Bombardeiro | `039-aviao-bombardeiro.jpg` |
+| 40 | Avião Noturno | `040-aviao-noturno.jpg` |
 
 ---
 
-## ESPECIAIS (086-100)
+## ESPECIAIS (041-078)
 
 | ID | Nome do Produto | Nome do Arquivo |
 |---|---|---|
-| 86 | Vulcão | `086-vulcao.jpg` |
-| 87 | Mini Vulcão | `087-mini-vulcao.jpg` |
-| 88 | Fonte de Crack | `088-fonte-de-crack.jpg` |
-| 89 | Flor (25 tiros) | `089-flor-25-tiros.jpg` |
-| 90 | Flor (50 tiros) | `090-flor-50-tiros.jpg` |
-| 91 | Flor (100 tiros) | `091-flor-100-tiros.jpg` |
-| 92 | Coroa Real | `092-coroa-real.jpg` |
-| 93 | Castelo de Fogo | `093-castelo-de-fogo.jpg` |
-| 94 | Torre Cintilante | `094-torre-cintilante.jpg` |
-| 95 | Pirâmide de Fogo | `095-piramide-de-fogo.jpg` |
-| 96 | Catarata Dourada | `096-catarata-dourada.jpg` |
-| 97 | Buscapé Grande | `097-buscape-grande.jpg` |
-| 98 | Girador de Fogo | `098-girador-de-fogo.jpg` |
-| 99 | Roda de Fogo | `099-roda-de-fogo.jpg` |
-| 100 | Combo Festa Completa | `100-combo-festa-completa.jpg` |
+| 41 | Bola Brasil | `041-bola-brasil.jpg` |
+| 42 | Pião Maluco | `042-piao-maluco.jpg` |
+| 43 | Vulcão caseiro | `043-vulcao-caseiro.jpg` |
+| 44 | Vulcão | `044-vulcao.jpg` |
+| 45 | Mini Vulcão | `045-mini-vulcao.jpg` |
+| 46 | Fonte de Crack | `046-fonte-crack.jpg` |
+| 47 | Flor (25 tiros) | `047-flor-25-tiros.jpg` |
+| 48 | Candelas C/12 (10 tiros) | `048-candelas-10-tiros.jpg` |
+| 49 | Candelas C/12 (20 tiros) | `049-candelas-20-tiros.jpg` |
+| 50 | Candelas C/12 (30 tiros) | `050-candelas-30-tiros.jpg` |
+| 51 | Torpedão | `051-torpedao.jpg` |
+| 52 | Carrinho | `052-carrinho.jpg` |
+| 53 | Árvore de Natal | `053-arvore-natal.jpg` |
+| 54 | Pistolão | `054-pistolao.jpg` |
+| 55 | Granada C/ istumpim | `055-granada-istumpim.jpg` |
+| 56 | Piaozinho | `056-piaozinho-12.jpg` |
+| 57 | Cobrinha | `057-cobrinha.jpg` |
+| 58 | Coqueirinho | `058-coqueirinho.jpg` |
+| 59 | Marceazinho | `059-marceazinho.jpg` |
+| 60 | Ovinho de marceanito | `060-ovinho-marceanito.jpg` |
+| 61 | Caverinha | `061-caverinha.jpg` |
+| 62 | Esputinique | `062-esputinique.jpg` |
+| 63 | Base de Míssil | `063-base-missil.jpg` |
+| 64 | Bomba cordão | `064-bomba-cordao.jpg` |
+| 65 | Bomba especial Tornado | `065-bomba-tornado.jpg` |
+| 66 | Super Pop | `066-super-pop.jpg` |
+| 67 | Rosita | `067-rosita.jpg` |
+| 68 | Piaozinho | `068-piaozinho-20.jpg` |
+| 69 | Bolinha Pisca | `069-bolinha-pisca.jpg` |
+| 70 | Aero musical | `070-aero-musical.jpg` |
+| 71 | Bomba faraônica | `071-bomba-faraonica.jpg` |
+| 72 | Treme Terra | `072-treme-terra.jpg` |
+| 73 | Chispinha | `073-chispinha.jpg` |
+| 74 | Ovo de dinossauro | `074-ovo-dinossauro.jpg` |
+| 75 | Puxa Boom | `075-puxa-boom.jpg` |
+| 76 | Morceguinho | `076-morceguinho.jpg` |
+| 77 | Cuckoo maravilhoso | `077-cuckoo-maravilhoso.jpg` |
+| 78 | Super Estalos | `078-super-estalos.jpg` |
 
 ---
 
-## 📝 COMO USAR:
+## 📝 INSTRUÇÕES DE UPLOAD:
 
-1. **Extraia as imagens do PDF** do catálogo
-2. **Renomeie com o padrão acima** (ex: `001-estalo-alianca.jpg`)
-3. **Faça upload no GitHub** na pasta `/images`
-4. Pronto! As imagens vão aparecer automaticamente no site 🎉
+1. **Extraia as imagens do PDF** do catálogo Bazar Mini Preço 2026
+2. **Renomeie com o padrão:** `XXX-nome-do-produto.jpg`
+   - Use EXATAMENTE o nome da coluna "Nome do Arquivo" acima
+3. **Faça upload no GitHub:**
+   - Vá para: `github.com/rangelcasb/bazar-do-dan/images`
+   - Clique em "Add file" → "Upload files"
+   - Arraste as imagens
+   - Clique "Commit changes"
+4. **Pronto!** As imagens aparecem no site em 1-2 minutos 🎉
 
 ---
 
-**Dúvidas?** Cada produto tem um ID número, use ele para não errar!
+**Total: 78 produtos reais do catálogo**
+
+Qualquer dúvida sobre o nome do arquivo, é só consultar esta tabela!
