@@ -461,7 +461,7 @@
     </header>
 
     <div class="container">
-        <div class="controls">
+        <div class="controls" id="controls">
             <div class="controls-grid">
                 <div class="control-group">
                     <label>🔍 Buscar</label>
@@ -508,8 +508,15 @@
         <span id="cartIndicatorText">Carrinho: 0 itens</span>
     </div>
 
+    <!-- Botão Carrinho -->
+    <button style="position: fixed; bottom: 90px; left: 20px; border-radius: 50%; width: 60px; height: 60px; background: #FFD700; color: #000; border: none; font-size: 24px; font-weight: 600; cursor: pointer; z-index: 98; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;" onclick="showCartPage()" title="Abrir carrinho">🛒</button>
+
     <!-- Botão WhatsApp Flutuante -->
-    <button class="whatsapp-button" onclick="toggleWhatsappMenu()" title="Menu WhatsApp">💬</button>
+    <button class="whatsapp-button" onclick="toggleWhatsappMenu()" title="Menu WhatsApp" style="display:flex; align-items:center; justify-content:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+    </button>
 
     <!-- Menu WhatsApp Avançado -->
     <div id="whatsappMenu" class="whatsapp-menu" style="display: none;">
@@ -537,6 +544,35 @@
                 <button onclick="sendAdvancedWhatsApp()" style="flex: 1; padding: 12px; background: #25D366; color: #fff; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">✓ Enviar</button>
                 <button onclick="document.getElementById('whatsappModal').style.display = 'none';" style="flex: 1; padding: 12px; background: #333; color: #fff; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">✕ Cancelar</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal de Quantidade -->
+    <div id="quantityModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:#1a1a1a; border:2px solid #FFD700; border-radius:12px; padding:28px; width:90%; max-width:320px; text-align:center;">
+            <h3 id="qtyModalTitle" style="color:#FFD700; margin:0 0 16px; font-size:18px;">Produto</h3>
+            <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin:20px 0; background:#0a0a0a; padding:12px; border-radius:8px;">
+                <button onclick="changeQty(-1)" style="background:#E63946; border:none; color:#fff; width:36px; height:36px; border-radius:4px; cursor:pointer; font-weight:600; font-size:18px;">−</button>
+                <input id="qtyInput" type="number" min="1" value="1" style="width:60px; text-align:center; background:#1a1a1a; border:1px solid #333; color:#fff; padding:8px; border-radius:4px; font-weight:600;">
+                <button onclick="changeQty(1)" style="background:#25D366; border:none; color:#fff; width:36px; height:36px; border-radius:4px; cursor:pointer; font-weight:600; font-size:18px;">+</button>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+                <button onclick="closeQuantityModal()" style="flex:1; padding:12px; background:#333; color:#fff; border:none; border-radius:4px; font-weight:600; cursor:pointer;">Cancelar</button>
+                <button onclick="confirmAddToCart()" style="flex:1; padding:12px; background:#FFD700; color:#000; border:none; border-radius:4px; font-weight:600; cursor:pointer;">Adicionar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página Carrinho -->
+    <div id="cartPage" style="display:none;">
+        <div class="container" style="padding:20px 0;">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+                <button onclick="showProductsPage()" style="background:none; border:none; color:#FFD700; font-size:24px; cursor:pointer;">←</button>
+                <h1 style="color:#FFD700; margin:0;">Carrinho</h1>
+            </div>
+            <div id="cartItemsList"></div>
+            <div id="cartTotal" style="font-size:20px; color:#FFD700; font-weight:600; text-align:right; margin-top:20px; padding:16px; background:#1a1a1a; border-radius:8px; border:1px solid #333;">Total: R$ 0,00</div>
+            <button onclick="sendCartWhatsApp()" style="width:100%; padding:14px; background:#25D366; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; margin-top:16px; font-size:16px;">Enviar pedido pelo WhatsApp</button>
         </div>
     </div>
 
@@ -642,6 +678,16 @@
         let cart = [];
         const whatsappNumber = "5582999999999";
 
+        // localStorage — persistência do carrinho
+        function saveCart() {
+            localStorage.setItem('bazarDodan_cart', JSON.stringify(cart));
+        }
+
+        function loadCart() {
+            const saved = localStorage.getItem('bazarDodan_cart');
+            cart = saved ? JSON.parse(saved) : [];
+        }
+
         function renderProducts(filtered = products) {
             const grid = document.getElementById('productsGrid');
             
@@ -663,8 +709,8 @@
                         <div class="product-price-section">
                             <div class="product-price">R$ ${p.preco.toFixed(2)}</div>
                             <div class="product-actions">
-                                <button class="btn" onclick="addToCart(${p.id})">+ Carrinho</button>
-                                <button class="btn whatsapp" onclick="shareWhatsApp('${p.name}', ${p.preco})">📱</button>
+                                <button class="btn" onclick="openQuantityModal(${p.id})">+ Carrinho</button>
+                                <button class="btn whatsapp" onclick="shareWhatsApp('${p.name}', ${p.preco})" title="Compartilhar no WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="20" height="20" style="display:inline-block;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></button>
                             </div>
                         </div>
                     </div>
@@ -689,17 +735,66 @@
             renderProducts(filtered);
         }
 
-        function addToCart(id) {
+        function addToCart(id, qty = 1) {
             const product = products.find(p => p.id === id);
             const existing = cart.find(c => c.id === id);
-            
+
             if (existing) {
-                existing.quantity += 1;
+                existing.quantity += qty;
             } else {
-                cart.push({ ...product, quantity: 1 });
+                cart.push({ ...product, quantity: qty });
             }
-            
+
+            saveCart();
             updateCartDisplay();
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            saveCart();
+            updateCartDisplay();
+            renderCartPage();
+        }
+
+        function updateCartQty(id, qty) {
+            const item = cart.find(c => c.id === id);
+            if (item) {
+                if (qty <= 0) {
+                    removeFromCart(id);
+                } else {
+                    item.quantity = qty;
+                    saveCart();
+                    updateCartDisplay();
+                    renderCartPage();
+                }
+            }
+        }
+
+        // Modal de quantidade
+        function openQuantityModal(id) {
+            const product = products.find(p => p.id === id);
+            window._pendingProductId = id;
+            document.getElementById('qtyModalTitle').textContent = product.name;
+            document.getElementById('qtyInput').value = '1';
+            document.getElementById('quantityModal').style.display = 'flex';
+        }
+
+        function changeQty(delta) {
+            const input = document.getElementById('qtyInput');
+            let value = parseInt(input.value) + delta;
+            if (value < 1) value = 1;
+            input.value = value;
+        }
+
+        function closeQuantityModal() {
+            document.getElementById('quantityModal').style.display = 'none';
+        }
+
+        function confirmAddToCart() {
+            const id = window._pendingProductId;
+            const qty = parseInt(document.getElementById('qtyInput').value);
+            addToCart(id, qty);
+            closeQuantityModal();
         }
 
         function shareWhatsApp(name, price) {
@@ -792,6 +887,78 @@
             window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, '_blank');
         }
 
+        // Página de carrinho
+        function renderCartPage() {
+            const list = document.getElementById('cartItemsList');
+
+            if (cart.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#999; padding:40px;">Seu carrinho está vazio</p>';
+                document.getElementById('cartTotal').textContent = 'Total: R$ 0,00';
+                return;
+            }
+
+            let html = '<div style="display:grid; gap:12px;">';
+            cart.forEach(item => {
+                const subtotal = (item.preco * item.quantity).toFixed(2);
+                html += `
+                    <div style="background:#1a1a1a; border:1px solid #333; padding:16px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                        <div style="flex:1;">
+                            <div style="font-weight:600; color:#FFD700;">${item.name}</div>
+                            <div style="font-size:12px; color:#999; margin:4px 0;">R$ ${item.preco.toFixed(2)} cada</div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button onclick="updateCartQty(${item.id}, ${item.quantity - 1})" style="background:#E63946; border:none; color:#fff; width:32px; height:32px; border-radius:4px; cursor:pointer; font-weight:600;">−</button>
+                            <span style="width:40px; text-align:center; font-weight:600;">${item.quantity}</span>
+                            <button onclick="updateCartQty(${item.id}, ${item.quantity + 1})" style="background:#25D366; border:none; color:#fff; width:32px; height:32px; border-radius:4px; cursor:pointer; font-weight:600;">+</button>
+                            <button onclick="removeFromCart(${item.id})" style="background:#333; border:none; color:#fff; width:32px; height:32px; border-radius:4px; cursor:pointer; margin-left:8px;">🗑</button>
+                        </div>
+                        <div style="text-align:right; margin-left:16px; min-width:100px;">
+                            <div style="font-weight:600; color:#FFD700;">R$ ${subtotal}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            list.innerHTML = html;
+
+            const total = cart.reduce((acc, item) => acc + (item.preco * item.quantity), 0);
+            document.getElementById('cartTotal').textContent = `Total: R$ ${total.toFixed(2)}`;
+        }
+
+        function showCartPage() {
+            document.getElementById('productsGrid').parentElement.style.display = 'none';
+            document.getElementById('controls').style.display = 'none';
+            document.getElementById('cartPage').style.display = 'block';
+            renderCartPage();
+        }
+
+        function showProductsPage() {
+            document.getElementById('productsGrid').parentElement.style.display = 'block';
+            document.getElementById('controls').style.display = 'block';
+            document.getElementById('cartPage').style.display = 'none';
+        }
+
+        function sendCartWhatsApp() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+
+            let message = `🛒 *PEDIDO - Bazar do Dan*\n\n`;
+
+            cart.forEach((item, index) => {
+                message += `${index + 1}. *${item.name}*\n`;
+                message += `   Qtd: ${item.quantity}x | R$ ${item.preco.toFixed(2)} cada\n`;
+                message += `   Subtotal: R$ ${(item.preco * item.quantity).toFixed(2)}\n\n`;
+            });
+
+            const total = cart.reduce((acc, item) => acc + (item.preco * item.quantity), 0);
+            message += `💵 *TOTAL: R$ ${total.toFixed(2)}*\n\n`;
+
+            const encoded = encodeURIComponent(message);
+            window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, '_blank');
+        }
+
         function toggleWhatsappMenu() {
             const menu = document.getElementById('whatsappMenu');
             menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
@@ -827,16 +994,11 @@
             filterProducts();
         });
         document.getElementById('categoryFilter').addEventListener('change', filterProducts);
-        document.getElementById('cartIndicator').addEventListener('click', () => {
-            if (cart.length > 0) {
-                const items = cart.map(item => `${item.name} (${item.quantity}x R$ ${item.preco.toFixed(2)})`).join('\n');
-                const total = cart.reduce((acc, item) => acc + (item.preco * item.quantity), 0);
-                const text = `Olá! Gostaria de fazer um pedido:\n\n${items}\n\nTotal: R$ ${total.toFixed(2)}`;
-                const encoded = encodeURIComponent(text);
-                window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, '_blank');
-            }
-        });
+        document.getElementById('cartIndicator').addEventListener('click', showCartPage);
 
+        // Inicialização
+        loadCart();
+        updateCartDisplay();
         renderProducts();
     </script>
 </body>
