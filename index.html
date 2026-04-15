@@ -89,6 +89,134 @@
         .stat-value {
             color: #FFD700;
             font-weight: 700;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-value.pulse {
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: #FFD700;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            margin-right: 16px;
+        }
+
+        /* Sidebar de Categorias - Desktop */
+        @media (min-width: 769px) {
+            .sidebar {
+                display: block !important;
+                position: sticky;
+                left: 0;
+                top: 70px;
+                width: 280px;
+                height: calc(100vh - 70px);
+                background-color: #111111;
+                border-right: 2px solid #2a2a2a;
+                overflow-y: auto;
+                padding: 16px 0;
+                z-index: 50;
+            }
+
+            .main-container {
+                display: grid;
+                grid-template-columns: 280px 1fr;
+            }
+
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+
+        /* Sidebar de Categorias - Mobile */
+        .sidebar {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 280px;
+            height: calc(100vh - 70px);
+            background-color: #111111;
+            border-right: 2px solid #2a2a2a;
+            overflow-y: auto;
+            padding: 16px 0;
+            z-index: 98;
+        }
+
+        .sidebar.show {
+            display: block;
+        }
+
+        .sidebar-title {
+            padding: 16px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #aaaaaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .category-item {
+            padding: 14px 20px;
+            background-color: transparent;
+            border: none;
+            border-left: 3px solid transparent;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .category-item:hover {
+            background-color: #1a1a1a;
+            border-left-color: #FFD700;
+        }
+
+        .category-item.active {
+            background-color: #1a1a1a;
+            border-left-color: #FFD700;
+            color: #FFD700;
+        }
+
+        /* Overlay para drawer mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 97;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        /* Container com sidebar */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            transition: margin-left 0.3s ease;
         }
 
         /* Controles */
@@ -104,10 +232,10 @@
         }
 
         .controls-grid {
-            max-width: 1200px;
+            max-width: 100%;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr auto auto;
+            grid-template-columns: 1fr auto;
             gap: 16px;
             align-items: center;
         }
@@ -677,23 +805,40 @@
             position: fixed;
             bottom: 24px;
             right: 24px;
-            background-color: #1a1a1a;
-            border: 2px solid #FFD700;
-            color: #FFD700;
-            padding: 12px 16px;
+            background-color: #FFD700;
+            border: none;
+            color: #000;
+            padding: 12px 18px;
             border-radius: 12px;
             cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             z-index: 98;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.35);
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap;
         }
 
         #cartIndicator:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 16px rgba(255,215,0,0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 28px rgba(255, 215, 0, 0.5);
+            background-color: #e6c200;
+        }
+
+        #cartIndicator.updated {
+            animation: cartPulse 0.6s ease;
+        }
+
+        @keyframes cartPulse {
+            0%, 100% { transform: translateY(0) scale(1); }
+            25% { transform: translateY(-8px) scale(1.08); }
+            50% { transform: translateY(-8px) scale(1.08); }
+            75% { transform: translateY(-4px) scale(1.03); }
         }
 
         .whatsapp-button {
@@ -770,19 +915,51 @@
 
         /* Responsividade */
         @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 280px;
+                height: calc(100vh - 70px);
+                border-right: 2px solid #2a2a2a;
+                z-index: 98;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                padding: 16px 0;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay {
+                display: none;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+
             .header-content {
-                flex-direction: column;
+                flex-direction: row;
                 gap: 12px;
+                justify-content: space-between;
             }
 
             .logo {
-                text-align: center;
+                text-align: left;
                 font-size: 20px;
+                flex: 1;
             }
 
             .header-stats {
-                width: 100%;
-                justify-content: space-around;
+                width: auto;
+                justify-content: flex-end;
+                gap: 12px;
             }
 
             .controls-grid {
@@ -926,13 +1103,14 @@
     <!-- Header -->
     <header>
         <div class="header-content">
+            <button class="hamburger" onclick="toggleSidebar()">☰</button>
             <div class="logo">
                 <span class="logo-emoji">🎆</span>
                 <span class="logo-text">Bazar <span class="logo-highlight">do Dan</span></span>
             </div>
             <div class="header-stats">
                 <div class="stat-badge">
-                    🛒 <span id="cartCount" class="stat-value">0</span> itens
+                    🛒 <span id="cartCount" class="stat-value">0</span>
                 </div>
                 <div class="stat-badge">
                     💰 <span id="totalValue" class="stat-value">R$ 0,00</span>
@@ -941,21 +1119,43 @@
         </div>
     </header>
 
+    <!-- Sidebar de categorias -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-title">Categorias</div>
+        <div class="category-list">
+            <button class="category-item active" onclick="filterByCategory('')">
+                ✓ Todas
+            </button>
+            <button class="category-item" onclick="filterByCategory('Estalos')">
+                Estalos
+            </button>
+            <button class="category-item" onclick="filterByCategory('Bombas')">
+                Bombas
+            </button>
+            <button class="category-item" onclick="filterByCategory('Traques')">
+                Traques
+            </button>
+            <button class="category-item" onclick="filterByCategory('Chuvinhas')">
+                Chuvinhas
+            </button>
+            <button class="category-item" onclick="filterByCategory('Aviões')">
+                Aviões
+            </button>
+            <button class="category-item" onclick="filterByCategory('Especiais')">
+                Especiais
+            </button>
+        </div>
+    </div>
+
+    <!-- Overlay do sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
     <!-- Controles -->
     <div id="controls">
         <div class="controls-grid">
             <div class="search-wrapper">
                 <input type="text" id="searchInput" placeholder="Buscar produtos...">
             </div>
-            <select id="categoryFilter">
-                <option value="">Todas as categorias</option>
-                <option value="Estalos">Estalos</option>
-                <option value="Bombas">Bombas</option>
-                <option value="Traques">Traques</option>
-                <option value="Chuvinhas">Chuvinhas</option>
-                <option value="Aviões">Aviões</option>
-                <option value="Especiais">Especiais</option>
-            </select>
             <div class="price-control">
                 <input type="range" id="priceRange" min="0" max="100" value="100" step="1">
                 <span id="priceValue">Até R$ 100</span>
@@ -963,24 +1163,38 @@
         </div>
     </div>
 
-    <!-- Container principal -->
-    <div class="container">
-        <!-- Grid de produtos -->
-        <div style="display: block;">
-            <div id="productsGrid" class="products-grid"></div>
-        </div>
+    <!-- Select hidden para compatibilidade com JavaScript -->
+    <select id="categoryFilter" style="display: none;">
+        <option value="">Todas as categorias</option>
+        <option value="Estalos">Estalos</option>
+        <option value="Bombas">Bombas</option>
+        <option value="Traques">Traques</option>
+        <option value="Chuvinhas">Chuvinhas</option>
+        <option value="Aviões">Aviões</option>
+        <option value="Especiais">Especiais</option>
+    </select>
 
-        <!-- Página do carrinho -->
-        <div id="cartPage">
-            <div class="cart-header">
-                <h2>Meu Carrinho</h2>
-                <button class="btn-back" onclick="showProductsPage()">← Voltar</button>
+    <!-- Container principal com sidebar -->
+    <div class="main-container">
+        <!-- Container de conteúdo -->
+        <div class="container">
+            <!-- Grid de produtos -->
+            <div style="display: block;">
+                <div id="productsGrid" class="products-grid"></div>
             </div>
-            <div id="cartItemsList"></div>
-            <div id="cartTotal">Total: R$ 0,00</div>
-            <div class="cart-actions">
-                <button class="btn-checkout" onclick="sendCartWhatsApp()">📱 Enviar Pedido</button>
-                <button class="btn-continue" onclick="showProductsPage()">Continuar Comprando</button>
+
+            <!-- Página do carrinho -->
+            <div id="cartPage">
+                <div class="cart-header">
+                    <h2>Meu Carrinho</h2>
+                    <button class="btn-back" onclick="showProductsPage()">← Voltar</button>
+                </div>
+                <div id="cartItemsList"></div>
+                <div id="cartTotal">Total: R$ 0,00</div>
+                <div class="cart-actions">
+                    <button class="btn-checkout" onclick="sendCartWhatsApp()">📱 Enviar Pedido</button>
+                    <button class="btn-continue" onclick="showProductsPage()">Continuar Comprando</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1175,6 +1389,16 @@
             const search = document.getElementById('searchInput').value.toLowerCase();
             const maxPrice = parseFloat(document.getElementById('priceRange').value);
             const category = document.getElementById('categoryFilter').value;
+
+            // Atualizar o item ativo na sidebar
+            const categoryItems = document.querySelectorAll('.category-item');
+            categoryItems.forEach(item => {
+                item.classList.remove('active');
+                if ((category === '' && item.textContent.includes('Todas')) ||
+                    (category !== '' && item.textContent.includes(category))) {
+                    item.classList.add('active');
+                }
+            });
 
             let filtered = products.filter(p => {
                 const matchSearch = p.name.toLowerCase().includes(search);
@@ -1414,15 +1638,62 @@
             const count = cart.reduce((acc, item) => acc + item.quantity, 0);
             const total = cart.reduce((acc, item) => acc + (item.preco * item.quantity), 0);
 
-            document.getElementById('cartCount').textContent = count;
-            document.getElementById('totalValue').textContent = `R$ ${total.toFixed(2)}`;
+            const cartCountEl = document.getElementById('cartCount');
+            const totalValueEl = document.getElementById('totalValue');
+            const cartIndicator = document.getElementById('cartIndicator');
+
+            // Adicionar animação de pulso
+            cartCountEl.classList.add('pulse');
+            totalValueEl.classList.add('pulse');
+            cartIndicator.classList.add('updated');
+
+            // Remover a classe de animação após a conclusão
+            setTimeout(() => {
+                cartCountEl.classList.remove('pulse');
+                totalValueEl.classList.remove('pulse');
+            }, 300);
+
+            setTimeout(() => {
+                cartIndicator.classList.remove('updated');
+            }, 600);
+
+            cartCountEl.textContent = count;
+            totalValueEl.textContent = `R$ ${total.toFixed(2)}`;
 
             if (count > 0) {
-                document.getElementById('cartIndicator').style.display = 'block';
-                document.getElementById('cartIndicatorText').textContent = `Carrinho: ${count} itens - R$ ${total.toFixed(2)}`;
+                cartIndicator.style.display = 'flex';
+                document.getElementById('cartIndicatorText').textContent = `🛒 ${count} itens • R$ ${total.toFixed(2)}`;
             } else {
-                document.getElementById('cartIndicator').style.display = 'none';
+                cartIndicator.style.display = 'none';
             }
+        }
+
+        // Controlar sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('show');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.remove('show');
+            overlay.classList.remove('show');
+        }
+
+        function filterByCategory(category) {
+            const categoryItems = document.querySelectorAll('.category-item');
+            categoryItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            event.target.classList.add('active');
+
+            document.getElementById('categoryFilter').value = category;
+            filterProducts();
+            closeSidebar();
         }
 
         document.getElementById('searchInput').addEventListener('input', filterProducts);
