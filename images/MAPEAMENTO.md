@@ -47,9 +47,8 @@ Exemplo: Produto ID 3 → `003-estalo-bebe.jpg`
 | 17 | Apito Vara | `017-apito-vara.jpg` |
 | 18 | Vela magnesiana | `018-vela-magnesiana-10.jpg` |
 | 19 | Vela magnesiana | `019-vela-magnesiana-12.jpg` |
-| 20 | Traque Gurizinho C/20 | `020-traque-gurizinho.jpg` |
-| 21 | Traque Guri C/10 | `021-traque-guri.jpg` |
-| 22 | Traque Redondo C/10 | `022-traque-redondo.jpg` |
+| 20 | Traque Gurizinho 80un | `020-traque-gurizinho.jpg` |
+| 21 | Traque Gurizinho pacote com 10 Caixas | `021-caixa-gurizinho.jpg` |
 | 23 | 3 Tiros | `023-3-tiros.jpg` |
 | 24 | 3x1 | `024-3x1.jpg` |
 | 25 | 12x1 | `025-12x1.jpg` |
