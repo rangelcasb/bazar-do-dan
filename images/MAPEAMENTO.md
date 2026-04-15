@@ -4,24 +4,26 @@
 
 **Como nomear as imagens:** Use o formato `XXX-nome-do-produto.jpg`
 
-Exemplo: Produto ID 1 → `001-estalo-alianca.jpg`
+Exemplo: Produto ID 3 → `003-estalo-bebe.jpg`
+
+**IMPORTANTE:** Os IDs não são renumerados ao deletar produtos. Se você exclui ID 5, ele vira um "buraco" na sequência.
 
 ---
 
-## ESTALOS (001-006)
+## ESTALOS
 
-| ID | Nome do Produto | Nome do Arquivo |
-|---|---|---|
-| 1 | Estalo Bebê Aliança | `001-estalo-alianca.jpg` |
-| 2 | Estalo Bebê Aliança | `002-estalo-alianca.jpg` |
-| 3 | Estalo bebe | `003-estalo-bebe.jpg` |
-| 4 | Estalo Bebê Aliada Guarany | `004-estalo-aliada-guarany.jpg` |
-| 5 | Mariposa | `005-mariposa.jpg` |
-| 6 | Bengalinhas | `006-bengalinhas.jpg` |
+| ID | Nome do Produto | Nome do Arquivo | Status |
+|---|---|---|---|
+| 1 | ~~Estalo Bebê Aliança~~ | ~~`001-estalo-alianca.jpg`~~ | ❌ DELETADO |
+| 2 | ~~Estalo Bebê Aliança~~ | ~~`002-estalo-alianca.jpg`~~ | ❌ DELETADO |
+| 3 | Estalo bebe | `003-estalo-bebe.jpg` | ✅ ATIVO |
+| 4 | ~~Estalo Bebê Aliada Guarany~~ | ~~`004-estalo-aliada-guarany.jpg`~~ | ❌ DELETADO |
+| 5 | Mariposa | `005-mariposa.jpg` | ✅ ATIVO |
+| 6 | Bengalinhas | `006-bengalinhas.jpg` | ✅ ATIVO |
 
 ---
 
-## BOMBAS (007-013)
+## BOMBAS
 
 | ID | Nome do Produto | Nome do Arquivo |
 |---|---|---|
@@ -35,7 +37,7 @@ Exemplo: Produto ID 1 → `001-estalo-alianca.jpg`
 
 ---
 
-## TRAQUES (014-025)
+## TRAQUES
 
 | ID | Nome do Produto | Nome do Arquivo |
 |---|---|---|
@@ -54,7 +56,7 @@ Exemplo: Produto ID 1 → `001-estalo-alianca.jpg`
 
 ---
 
-## CHUVINHAS (026-032)
+## CHUVINHAS
 
 | ID | Nome do Produto | Nome do Arquivo |
 |---|---|---|
@@ -68,7 +70,7 @@ Exemplo: Produto ID 1 → `001-estalo-alianca.jpg`
 
 ---
 
-## AVIÕES (033-040)
+## AVIÕES
 
 | ID | Nome do Produto | Nome do Arquivo |
 |---|---|---|
@@ -83,7 +85,7 @@ Exemplo: Produto ID 1 → `001-estalo-alianca.jpg`
 
 ---
 
-## ESPECIAIS (041-078)
+## ESPECIAIS
 
 | ID | Nome do Produto | Nome do Arquivo |
 |---|---|---|
@@ -142,6 +144,8 @@ Exemplo: Produto ID 1 → `001-estalo-alianca.jpg`
 
 ---
 
-**Total: 78 produtos reais do catálogo**
+**Total: 75 produtos ativos** (de 78 do catálogo original)
+
+**Produtos deletados:** IDs 1, 2, 4
 
 Qualquer dúvida sobre o nome do arquivo, é só consultar esta tabela!
