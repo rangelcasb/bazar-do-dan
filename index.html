@@ -119,7 +119,12 @@
             right: 20px;
         }
 
-        /* Sidebar de Categorias - Desktop */
+        /* Botão de categorias */
+        .categories-button {
+            display: none;
+        }
+
+        /* Sidebar de Categorias - Desktop (SEMPRE VISÍVEL) */
         @media (min-width: 769px) {
             .sidebar {
                 display: block !important;
@@ -149,7 +154,20 @@
             }
 
             .products-grid {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .categories-button {
+                display: none;
+            }
+
+            .categories-button:hover {
+                background-color: #e6c200;
+                box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+            }
+
+            .hamburger {
+                display: none;
             }
 
             .sidebar-overlay {
@@ -968,12 +986,49 @@
 
         /* Responsividade */
         @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+                position: fixed;
+                left: 0;
+                top: 70px;
+                width: 280px;
+                height: calc(100vh - 70px);
+                background-color: #111111;
+                border-right: 2px solid #2a2a2a;
+                overflow-y: auto;
+                padding: 16px 0;
+                z-index: 98;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.show {
+                display: block;
+                transform: translateX(0);
+            }
+
             .main-container {
                 grid-template-columns: 1fr;
             }
 
             .logo {
                 font-size: 18px;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .categories-button {
+                display: none;
+            }
+
+            .sidebar-overlay {
+                display: none;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
             }
 
             .controls-grid {
@@ -1678,6 +1733,7 @@
         }
 
         // Controlar sidebar
+        // Toggle sidebar (mobile drawer)
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
@@ -1685,6 +1741,7 @@
             overlay.classList.toggle('show');
         }
 
+        // Fechar sidebar (mobile drawer)
         function closeSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
@@ -1702,6 +1759,8 @@
 
             document.getElementById('categoryFilter').value = category;
             filterProducts();
+
+            // Fechar drawer em mobile
             closeSidebar();
 
             // Reset scroll para o topo
