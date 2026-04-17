@@ -1511,43 +1511,34 @@
             });
         }
 
-        // Mapear imagens para todos os produtos (match por nome normalizado + fallback por ID)
+        // Mapear imagens para todos os produtos usando manifest.json
         async function mapProductImages(manifest) {
-            const promises = products.map(async (p) => {
-                const id = String(p.id).padStart(3, '0');
-                const normalized = normalizeName(p.name);
-
-                // Estágio 1: match por nome normalizado
-                const byName = [
-                    `images/${id}-${normalized}.jpg`,
-                    `images/${id}-${normalized}.png`,
-                ];
-                for (const url of byName) {
-                    if (await probeImage(url)) {
-                        p.image = url;
-                        p.active = true;
-                        return;
+            // Criar índice rápido do manifest por ID
+            const manifestMap = {};
+            manifest.forEach(filename => {
+                const match = filename.match(/^(\d+)-/);
+                if (match) {
+                    const id = match[1];
+                    if (!manifestMap[id]) {
+                        manifestMap[id] = [];
                     }
+                    manifestMap[id].push(filename);
                 }
-
-                // Estágio 2: fallback por ID no manifest
-                const byId = manifest
-                    .filter(f => f.startsWith(id + '-'))
-                    .map(f => `images/${f}`);
-                for (const url of byId) {
-                    if (await probeImage(url)) {
-                        p.image = url;
-                        p.active = true;
-                        return;
-                    }
-                }
-
-                // Sem imagem válida
-                p.image = null;
-                p.active = false;
             });
 
-            await Promise.all(promises);
+            // Mapear cada produto
+            products.forEach(p => {
+                const id = String(p.id).padStart(3, '0');
+
+                // Procurar no manifest por ID
+                if (manifestMap[id] && manifestMap[id].length > 0) {
+                    p.image = `images/${manifestMap[id][0]}`;
+                    p.active = true;
+                } else {
+                    p.image = null;
+                    p.active = false;
+                }
+            });
         }
 
         // localStorage
@@ -1924,24 +1915,26 @@
         document.getElementById('cartIndicator').addEventListener('click', showCartPage);
 
         // Inicialização com mapeamento de imagens
-        async function initProducts() {
+        function initProducts() {
             loadCart();
             updateCartDisplay();
 
-            // Mostrar loading
-            document.getElementById('productsGrid').innerHTML =
-                '<div class="empty-state" style="grid-column:1/-1"><p>Carregando produtos...</p></div>';
-
-            let manifest = [];
-            try {
-                const res = await fetch('images/manifest.json');
-                manifest = await res.json();
-            } catch (e) {
-                console.warn('manifest.json não encontrado, usando apenas match por nome');
-            }
-
-            await mapProductImages(manifest);
-            renderProducts();
+            // Carregar manifest.json e mapear imagens
+            fetch('images/manifest.json')
+                .then(res => res.json())
+                .then(manifest => {
+                    mapProductImages(manifest);
+                    renderProducts();
+                })
+                .catch(e => {
+                    console.warn('Erro ao carregar manifest.json:', e);
+                    // Fallback: marcar todos como inativos
+                    products.forEach(p => {
+                        p.active = false;
+                        p.image = null;
+                    });
+                    renderProducts();
+                });
         }
 
         initProducts();
