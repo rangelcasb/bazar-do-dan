@@ -1491,6 +1491,65 @@
         let cart = [];
         const whatsappNumber = "5582999453211";
 
+        // Normalização de nomes para matching
+        function normalizeName(str) {
+            return str
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9\s]/g, '')
+                .trim()
+                .replace(/\s+/g, '-');
+        }
+
+        // Verificar se imagem existe via Image probe
+        function probeImage(url) {
+            return new Promise(resolve => {
+                const img = new Image();
+                img.onload = () => resolve(url);
+                img.onerror = () => resolve(null);
+                img.src = url + '?_=' + Date.now();
+            });
+        }
+
+        // Mapear imagens para todos os produtos (match por nome normalizado + fallback por ID)
+        async function mapProductImages(manifest) {
+            const promises = products.map(async (p) => {
+                const id = String(p.id).padStart(3, '0');
+                const normalized = normalizeName(p.name);
+
+                // Estágio 1: match por nome normalizado
+                const byName = [
+                    `images/${id}-${normalized}.jpg`,
+                    `images/${id}-${normalized}.png`,
+                ];
+                for (const url of byName) {
+                    if (await probeImage(url)) {
+                        p.image = url;
+                        p.active = true;
+                        return;
+                    }
+                }
+
+                // Estágio 2: fallback por ID no manifest
+                const byId = manifest
+                    .filter(f => f.startsWith(id + '-'))
+                    .map(f => `images/${f}`);
+                for (const url of byId) {
+                    if (await probeImage(url)) {
+                        p.image = url;
+                        p.active = true;
+                        return;
+                    }
+                }
+
+                // Sem imagem válida
+                p.image = null;
+                p.active = false;
+            });
+
+            await Promise.all(promises);
+        }
+
         // localStorage
         function saveCart() {
             localStorage.setItem('bazarDodan_cart', JSON.stringify(cart));
@@ -1504,18 +1563,21 @@
         function renderProducts(filtered = products) {
             const grid = document.getElementById('productsGrid');
 
-            if (filtered.length === 0) {
+            // Filtrar apenas produtos ativos (com imagem)
+            const active = filtered.filter(p => p.active === true);
+
+            if (active.length === 0) {
                 grid.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;"><p>Nenhum produto encontrado</p></div>`;
                 return;
             }
 
-            grid.innerHTML = filtered.map(p => {
+            grid.innerHTML = active.map(p => {
                 const badgeHtml = p.badge ? `<div style="padding: 12px; background: #2a2a2a; border-bottom: 1px solid #333;"><span class="badge">${p.badge}</span></div>` : '';
                 return `
                     <div class="product-card">
                         ${badgeHtml}
                         <div class="product-image">
-                            <img src="images/${String(p.id).padStart(3, '0')}-${p.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}.jpg" alt="${p.name}" onerror="if(!this.src.includes('.png')) this.src=this.src.replace('.jpg','.png'); else {this.style.display='none'; this.parentElement.innerHTML='📦'}">
+                            <img src="${p.image}" alt="${p.name}">
                         </div>
                         <div class="product-info">
                             <div class="product-name">${p.name}</div>
@@ -1549,6 +1611,7 @@
             });
 
             let filtered = products.filter(p => {
+                if (p.active !== true) return false;
                 const matchSearch = p.name.toLowerCase().includes(search);
                 const matchPrice = p.preco <= maxPrice;
                 const matchCategory = !category || p.categoria === category;
@@ -1595,6 +1658,7 @@
 
         function openQuantityModal(id) {
             const product = products.find(p => p.id === id);
+            if (!product || product.active !== true) return;
             window._pendingProductId = id;
             document.getElementById('qtyModalTitle').textContent = product.name;
             document.getElementById('qtyInput').value = '1';
@@ -1677,7 +1741,7 @@
             const categories = ['Estalos', 'Bombas', 'Traques', 'Chuvinhas', 'Aviões', 'Especiais'];
 
             categories.forEach(cat => {
-                const items = products.filter(p => p.categoria === cat);
+                const items = products.filter(p => p.categoria === cat && p.active === true);
                 message += `\n${cat.toUpperCase()} (${items.length} itens)\n`;
                 items.slice(0, 3).forEach(item => {
                     message += `  • ${item.name} - R$ ${item.preco.toFixed(2)}\n`;
@@ -1859,9 +1923,28 @@
         document.getElementById('categoryFilter').addEventListener('change', filterProducts);
         document.getElementById('cartIndicator').addEventListener('click', showCartPage);
 
-        loadCart();
-        updateCartDisplay();
-        renderProducts();
+        // Inicialização com mapeamento de imagens
+        async function initProducts() {
+            loadCart();
+            updateCartDisplay();
+
+            // Mostrar loading
+            document.getElementById('productsGrid').innerHTML =
+                '<div class="empty-state" style="grid-column:1/-1"><p>Carregando produtos...</p></div>';
+
+            let manifest = [];
+            try {
+                const res = await fetch('images/manifest.json');
+                manifest = await res.json();
+            } catch (e) {
+                console.warn('manifest.json não encontrado, usando apenas match por nome');
+            }
+
+            await mapProductImages(manifest);
+            renderProducts();
+        }
+
+        initProducts();
     </script>
 </body>
 </html>
