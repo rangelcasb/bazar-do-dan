@@ -779,6 +779,30 @@
             text-align: center;
         }
 
+        .variant-btn {
+            background-color: #0f0f0f;
+            border: 2px solid #2a2a2a;
+            color: #ffffff;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .variant-btn:hover {
+            border-color: #FFD700;
+            background-color: #141414;
+        }
+
+        .variant-btn.active {
+            background-color: #FFD700;
+            border-color: #FFD700;
+            color: #000;
+            font-weight: 600;
+        }
+
         .qty-controls {
             display: flex;
             align-items: center;
@@ -1402,7 +1426,11 @@
             // PRODUTOS REAIS DO CATÁLOGO - Bazar Mini Preço 2026
 
             // ESTALOS (IDs originais do PDF: 1,2,4 deletados; 3,5,6 mantidos)
-            { id: 3, name: "Estalo bebe", unidades: "100 unidades", preco: 8.00, categoria: "Estalos", badge: "Mais vendido" },
+            { id: 3, name: "Estalo bebe", unidades: "100 unidades", preco: 8.00, categoria: "Estalos", badge: "Mais vendido", variantes: [
+                { quantidade: 10, unidades: "10 unidades", preco: 1.50 },
+                { quantidade: 50, unidades: "50 unidades", preco: 6.00 },
+                { quantidade: 100, unidades: "100 unidades", preco: 8.00 }
+            ]},
             { id: 5, name: "Mariposa", unidades: "12 unidades", preco: 12.00, categoria: "Estalos" },
             { id: 6, name: "Bengalinhas", unidades: "25 unidades", preco: 6.00, categoria: "Estalos" },
 
@@ -1411,8 +1439,15 @@
             { id: 8, name: "Bomba Nº1", unidades: "Palito", preco: 0.18, categoria: "Bombas" },
             { id: 9, name: "Bomba Nº2", unidades: "Palito", preco: 0.40, categoria: "Bombas" },
             { id: 10, name: "Bomba Nº3", unidades: "Palito", preco: 0.60, categoria: "Bombas" },
-            { id: 11, name: "Bomba Nº1", unidades: "20 unidades", preco: 10.00, categoria: "Bombas" },
-            { id: 12, name: "Bomba Nº4", unidades: "20 unidades", preco: 12.00, categoria: "Bombas", badge: "Popular" },
+            { id: 11, name: "Bomba Nº1", unidades: "20 unidades", preco: 10.00, categoria: "Bombas", variantes: [
+                { quantidade: 20, unidades: "20 unidades", preco: 10.00 },
+                { quantidade: 100, unidades: "100 unidades", preco: 45.00 }
+            ]},
+            { id: 12, name: "Bomba Nº4", unidades: "20 unidades", preco: 12.00, categoria: "Bombas", badge: "Popular", variantes: [
+                { quantidade: 1, unidades: "1 unidade", preco: 12.00 },
+                { quantidade: 5, unidades: "5 unidades", preco: 55.00 },
+                { quantidade: 20, unidades: "20 unidades", preco: 200.00 }
+            ]},
             { id: 13, name: "Bomba charuto", unidades: "20 unidades", preco: 16.00, categoria: "Bombas" },
 
             // TRAQUES
@@ -1490,6 +1525,21 @@
 
         let cart = [];
         const whatsappNumber = "5582999453211";
+        const VARIANT_QUANTITIES = [1, 5, 10, 25, 50, 100];
+
+        // Encontrar preço correto para uma quantidade de variantes
+        function getPriceForVariant(product, quantity) {
+            if (!product.variantes || product.variantes.length === 0) {
+                return { quantidade: quantity, preco: product.preco, unidades: `${quantity} unidades` };
+            }
+
+            // Encontrar a variante que corresponde à quantidade
+            const matching = product.variantes.find(v => v.quantidade === quantity);
+            if (matching) return matching;
+
+            // Se não houver correspondência exata, retornar a primeira variante ou preço original
+            return product.variantes[0] || { quantidade: quantity, preco: product.preco, unidades: `${quantity} unidades` };
+        }
 
         // Normalização de nomes para matching
         function normalizeName(str) {
@@ -1612,18 +1662,31 @@
             renderProducts(filtered);
         }
 
-        function addToCart(id, qty = 1) {
+        function addToCart(id, qty = 1, unitPrice = null) {
             const product = products.find(p => p.id === id);
+            if (!product) return;
+
             const existing = cart.find(c => c.id === id);
 
             if (existing) {
                 existing.quantity += qty;
             } else {
-                cart.push({ ...product, quantity: qty });
+                const newItem = { ...product, quantity: qty };
+                if (unitPrice !== null) {
+                    newItem.preco = unitPrice;
+                }
+                cart.push(newItem);
             }
 
             saveCart();
             updateCartDisplay();
+
+            // Animar badge do carrinho
+            const badge = document.getElementById('totalValue');
+            if (badge) {
+                badge.classList.add('pulse');
+                setTimeout(() => badge.classList.remove('pulse'), 500);
+            }
         }
 
         function removeFromCart(id) {
@@ -1650,10 +1713,55 @@
         function openQuantityModal(id) {
             const product = products.find(p => p.id === id);
             if (!product || product.active !== true) return;
+
             window._pendingProductId = id;
-            document.getElementById('qtyModalTitle').textContent = product.name;
-            document.getElementById('qtyInput').value = '1';
+            window._pendingVariant = null;
+
+            const modalTitle = document.getElementById('qtyModalTitle');
+            const qtyControls = document.querySelector('.qty-controls');
+            const qtyInput = document.getElementById('qtyInput');
+
+            modalTitle.textContent = product.name;
+
+            // Se produto tem variantes, mostrar seletor de variantes
+            if (product.variantes && product.variantes.length > 0) {
+                // Limpar e criar HTML para variantes
+                let variantHTML = '<div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">';
+                variantHTML += '<label style="font-size: 14px; color: #aaa; font-weight: 600;">Selecione a quantidade:</label>';
+                variantHTML += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">';
+
+                product.variantes.forEach((variant, idx) => {
+                    const isFirst = idx === 0;
+                    variantHTML += `<button class="variant-btn ${isFirst ? 'active' : ''}" data-qty="${variant.quantidade}" data-price="${variant.preco}" onclick="selectVariant(${variant.quantidade}, ${variant.preco})">
+                        <div style="font-weight: 600;">${variant.quantidade} un</div>
+                        <div style="font-size: 12px; color: #aaa;">R$ ${variant.preco.toFixed(2)}</div>
+                    </button>`;
+                });
+
+                variantHTML += '</div></div>';
+
+                // Inserir antes dos controles
+                qtyControls.insertAdjacentHTML('beforebegin', variantHTML);
+                window._pendingVariant = product.variantes[0];
+                qtyInput.value = '1';
+            } else {
+                // Produto sem variantes, usar input normal
+                qtyInput.value = '1';
+            }
+
             document.getElementById('quantityModal').style.display = 'flex';
+        }
+
+        function selectVariant(quantity, price) {
+            const product = products.find(p => p.id === window._pendingProductId);
+            window._pendingVariant = { quantidade: quantity, preco: price };
+
+            // Atualizar UI
+            document.querySelectorAll('.variant-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.variant-btn').classList.add('active');
+
+            // Atualizar o input com a quantidade da variante
+            document.getElementById('qtyInput').value = '1';
         }
 
         function changeQty(delta) {
@@ -1664,14 +1772,39 @@
         }
 
         function closeQuantityModal() {
+            // Remover botões de variante adicionados dinamicamente
+            const variantContainer = document.querySelector('.qty-controls')?.previousElementSibling;
+            if (variantContainer && variantContainer.style.display === 'flex') {
+                variantContainer.remove();
+            }
             document.getElementById('quantityModal').style.display = 'none';
         }
 
         function confirmAddToCart() {
             const id = window._pendingProductId;
-            const qty = parseInt(document.getElementById('qtyInput').value);
-            addToCart(id, qty);
+            const qtyMultiplier = parseInt(document.getElementById('qtyInput').value);
+            const product = products.find(p => p.id === id);
+
+            if (!product) return;
+
+            let variantQuantity = qtyMultiplier;
+            let unitPrice = product.preco;
+
+            // Se tem variante selecionada, usar quantidade e preço da variante
+            if (window._pendingVariant) {
+                variantQuantity = window._pendingVariant.quantidade * qtyMultiplier;
+                unitPrice = window._pendingVariant.preco;
+            }
+
+            addToCart(id, variantQuantity, unitPrice);
             closeQuantityModal();
+
+            // Limpar elementos de variante adicionados ao DOM
+            document.querySelectorAll('[style*="display: flex"][style*="flex-direction: column"]').forEach(el => {
+                if (el.textContent.includes('Selecione a quantidade')) {
+                    el.remove();
+                }
+            });
         }
 
         function shareWhatsApp(name, price) {
