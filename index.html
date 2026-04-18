@@ -1858,7 +1858,7 @@
             // Se tem variante selecionada, usar quantidade e preço da variante
             if (window._pendingVariant) {
                 variantQuantity = window._pendingVariant.quantidade * qtyMultiplier;
-                unitPrice = window._pendingVariant.preco;
+                unitPrice = window._pendingVariant.preco / window._pendingVariant.quantidade;
             }
 
             addToCart(id, variantQuantity, unitPrice);
