@@ -1589,21 +1589,6 @@
 
         let cart = [];
         const whatsappNumber = "5582999453211";
-        const VARIANT_QUANTITIES = [1, 5, 10, 25, 50, 100];
-
-        // Encontrar preço correto para uma quantidade de variantes
-        function getPriceForVariant(product, quantity) {
-            if (!product.variantes || product.variantes.length === 0) {
-                return { quantidade: quantity, preco: product.preco, unidades: `${quantity} unidades` };
-            }
-
-            // Encontrar a variante que corresponde à quantidade
-            const matching = product.variantes.find(v => v.quantidade === quantity);
-            if (matching) return matching;
-
-            // Se não houver correspondência exata, retornar a primeira variante ou preço original
-            return product.variantes[0] || { quantidade: quantity, preco: product.preco, unidades: `${quantity} unidades` };
-        }
 
         // Normalização de nomes para matching
         function normalizeName(str) {
@@ -1794,8 +1779,10 @@
 
             // Se produto tem variantes, mostrar seletor de variantes
             if (product.variantes && product.variantes.length > 0) {
-                // Limpar e criar HTML para variantes
-                let variantHTML = '<div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">';
+                // Remover container anterior se existir (evita acúmulo no DOM)
+                document.getElementById('variantContainer')?.remove();
+
+                let variantHTML = '<div id="variantContainer" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">';
                 variantHTML += '<label style="font-size: 14px; color: #aaa; font-weight: 600;">Selecione a quantidade:</label>';
                 variantHTML += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">';
 
@@ -1842,11 +1829,7 @@
         }
 
         function closeQuantityModal() {
-            // Remover botões de variante adicionados dinamicamente
-            const variantContainer = document.querySelector('.qty-controls')?.previousElementSibling;
-            if (variantContainer && variantContainer.style.display === 'flex') {
-                variantContainer.remove();
-            }
+            document.getElementById('variantContainer')?.remove();
             document.getElementById('quantityModal').style.display = 'none';
         }
 
@@ -1868,13 +1851,6 @@
 
             addToCart(id, variantQuantity, unitPrice);
             closeQuantityModal();
-
-            // Limpar elementos de variante adicionados ao DOM
-            document.querySelectorAll('[style*="display: flex"][style*="flex-direction: column"]').forEach(el => {
-                if (el.textContent.includes('Selecione a quantidade')) {
-                    el.remove();
-                }
-            });
         }
 
         function shareWhatsApp(name, price) {
