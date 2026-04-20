@@ -1394,9 +1394,10 @@
             <div class="modal-title" id="qtyModalTitle">Produto</div>
             <div class="qty-controls">
                 <button class="qty-btn-modal" onclick="changeQty(-1)">−</button>
-                <input id="qtyInput" type="number" min="1" value="1" readonly>
+                <input id="qtyInput" type="number" min="1" value="1" oninput="updateDynamicPrice()">
                 <button class="qty-btn-modal" onclick="changeQty(1)">+</button>
             </div>
+            <div id="priceDisplay" style="text-align: center; margin: 12px 0; font-size: 16px; color: #FFD700; font-weight: 600;">Total: R$ 0,20</div>
             <div class="modal-actions">
                 <button class="modal-btn modal-btn-cancel" onclick="closeQuantityModal()">Cancelar</button>
                 <button class="modal-btn modal-btn-confirm" onclick="confirmAddToCart()">Adicionar</button>
@@ -1807,6 +1808,7 @@
             }
 
             document.getElementById('quantityModal').style.display = 'flex';
+            updateDynamicPrice();
         }
 
         function selectVariant(quantity, price, evt) {
@@ -1821,6 +1823,7 @@
 
             // Atualizar o input com a quantidade da variante
             document.getElementById('qtyInput').value = '1';
+            updateDynamicPrice();
         }
 
         function changeQty(delta) {
@@ -1828,6 +1831,40 @@
             let value = parseInt(input.value) + delta;
             if (value < 1) value = 1;
             input.value = value;
+            updateDynamicPrice();
+        }
+
+        function updateDynamicPrice() {
+            const id = window._pendingProductId;
+            const qtyInput = parseInt(document.getElementById('qtyInput').value) || 1;
+            const product = products.find(p => p.id === id);
+            const priceDisplay = document.getElementById('priceDisplay');
+
+            if (!product || !priceDisplay) return;
+
+            let unitPrice = product.preco;
+            let displayTotal = unitPrice * qtyInput;
+
+            // Se tem variante, calcular preço apropriado
+            if (product.variantes && product.variantes.length > 0) {
+                let selectedVariant = window._pendingVariant || product.variantes[0];
+
+                // Se usuario CLICOU em um botão de variante
+                if (window._variantClicked) {
+                    unitPrice = selectedVariant.preco / selectedVariant.quantidade;
+                    displayTotal = (selectedVariant.preco / selectedVariant.quantidade) * (selectedVariant.quantidade * qtyInput);
+                } else {
+                    // Se usuario digitou manualmente, buscar variante apropriada
+                    const matchingVariants = product.variantes.filter(v => v.quantidade <= qtyInput);
+                    if (matchingVariants.length > 0) {
+                        selectedVariant = matchingVariants[matchingVariants.length - 1];
+                    }
+                    unitPrice = selectedVariant.preco / selectedVariant.quantidade;
+                    displayTotal = unitPrice * qtyInput;
+                }
+            }
+
+            priceDisplay.textContent = `Total: R$ ${displayTotal.toFixed(2)}`.replace('.', ',');
         }
 
         function closeQuantityModal() {
