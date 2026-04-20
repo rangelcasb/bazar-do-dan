@@ -1308,25 +1308,25 @@
         <div class="sidebar" id="sidebar">
             <div class="sidebar-title">Categorias</div>
             <div class="category-list">
-                <button class="category-item active" onclick="filterByCategory('')">
+                <button class="category-item active" onclick="filterByCategory('', event)">
                     ✓ Todas
                 </button>
-                <button class="category-item" onclick="filterByCategory('Estalos')">
+                <button class="category-item" onclick="filterByCategory('Estalos', event)">
                     Estalos
                 </button>
-                <button class="category-item" onclick="filterByCategory('Bombas')">
+                <button class="category-item" onclick="filterByCategory('Bombas', event)">
                     Bombas
                 </button>
-                <button class="category-item" onclick="filterByCategory('Traques')">
+                <button class="category-item" onclick="filterByCategory('Traques', event)">
                     Traques
                 </button>
-                <button class="category-item" onclick="filterByCategory('Chuvinhas')">
+                <button class="category-item" onclick="filterByCategory('Chuvinhas', event)">
                     Chuvinhas
                 </button>
-                <button class="category-item" onclick="filterByCategory('Aviões')">
+                <button class="category-item" onclick="filterByCategory('Aviões', event)">
                     Aviões
                 </button>
-                <button class="category-item" onclick="filterByCategory('Especiais')">
+                <button class="category-item" onclick="filterByCategory('Especiais', event)">
                     Especiais
                 </button>
             </div>
@@ -1662,7 +1662,11 @@
 
         function loadCart() {
             const saved = localStorage.getItem('bazarDodan_cart');
-            cart = saved ? JSON.parse(saved) : [];
+            try {
+                cart = saved ? JSON.parse(saved) : [];
+            } catch (e) {
+                cart = [];
+            }
         }
 
         function renderProducts(filtered = products) {
@@ -1797,7 +1801,7 @@
 
                 product.variantes.forEach((variant, idx) => {
                     const isFirst = idx === 0;
-                    variantHTML += `<button class="variant-btn ${isFirst ? 'active' : ''}" data-qty="${variant.quantidade}" data-price="${variant.preco}" onclick="selectVariant(${variant.quantidade}, ${variant.preco})">
+                    variantHTML += `<button class="variant-btn ${isFirst ? 'active' : ''}" data-qty="${variant.quantidade}" data-price="${variant.preco}" onclick="selectVariant(${variant.quantidade}, ${variant.preco}, event)">
                         <div style="font-weight: 600;">${variant.quantidade} un</div>
                         <div style="font-size: 12px; color: #aaa;">R$ ${variant.preco.toFixed(2)}</div>
                     </button>`;
@@ -1817,13 +1821,14 @@
             document.getElementById('quantityModal').style.display = 'flex';
         }
 
-        function selectVariant(quantity, price) {
+        function selectVariant(quantity, price, evt) {
             const product = products.find(p => p.id === window._pendingProductId);
             window._pendingVariant = { quantidade: quantity, preco: price };
 
             // Atualizar UI
             document.querySelectorAll('.variant-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.closest('.variant-btn').classList.add('active');
+            const btn = evt && evt.target ? evt.target.closest('.variant-btn') : null;
+            if (btn) btn.classList.add('active');
 
             // Atualizar o input com a quantidade da variante
             document.getElementById('qtyInput').value = '1';
@@ -1879,6 +1884,7 @@
 
         function sendAdvancedWhatsApp() {
             const product = window.currentProduct;
+            if (!product) return;
             const customerPhone = document.getElementById('customerPhone').value.trim();
             const customMessage = document.getElementById('customMessage').value.trim();
 
@@ -2086,13 +2092,13 @@
             overlay.classList.remove('show');
         }
 
-        function filterByCategory(category) {
+        function filterByCategory(category, evt) {
             const categoryItems = document.querySelectorAll('.category-item');
             categoryItems.forEach(item => {
                 item.classList.remove('active');
             });
 
-            event.target.classList.add('active');
+            if (evt && evt.target) evt.target.classList.add('active');
 
             document.getElementById('categoryFilter').value = category;
             filterProducts();
