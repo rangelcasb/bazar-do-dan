@@ -385,14 +385,14 @@
             margin-bottom: 80px;
         }
 
-        /* Responsividade do grid - Telas maiores sem sidebar (mobile) */
-        @media (max-width: 1400px) and (max-width: 768px) {
+        /* Responsividade do grid - Telas intermediárias com sidebar */
+        @media (min-width: 769px) and (max-width: 1400px) {
             .products-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
 
-        @media (max-width: 1024px) and (max-width: 768px) {
+        @media (min-width: 769px) and (max-width: 1024px) {
             .products-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -1384,7 +1384,7 @@
 
     <div id="whatsappMenu" class="whatsapp-menu">
         <div class="whatsapp-menu-item" onclick="shareFullCatalog()">📚 Catálogo Completo</div>
-        <div class="whatsappMenu-item" onclick="shareProductList()">🛒 Enviar Lista</div>
+        <div class="whatsapp-menu-item" onclick="shareProductList()">🛒 Enviar Lista</div>
         <div class="whatsapp-menu-item" onclick="openDirectChat()">💬 Chat Direto</div>
     </div>
 
@@ -1908,6 +1908,7 @@
         }
 
         function shareProductList() {
+            document.getElementById('whatsappMenu').style.display = 'none';
             if (cart.length === 0) {
                 alert('Seu carrinho está vazio!');
                 return;
@@ -1931,6 +1932,7 @@
         }
 
         function shareFullCatalog() {
+            document.getElementById('whatsappMenu').style.display = 'none';
             let message = `📚 *CATÁLOGO COMPLETO - Bazar do Dan*\n\n`;
 
             const categories = ['Estalos', 'Bombas', 'Traques', 'Chuvinhas', 'Aviões', 'Especiais'];
@@ -1953,6 +1955,7 @@
         }
 
         function openDirectChat() {
+            document.getElementById('whatsappMenu').style.display = 'none';
             const greeting = `Olá! Gostaria de informações sobre os produtos do Bazar do Dan 👋`;
             const encoded = encodeURIComponent(greeting);
             window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, '_blank');
