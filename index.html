@@ -1668,6 +1668,24 @@
     updateCartUI();
   };
 
+  function recalculateCartItemPrice(id) {
+    const product = PRODUCTS.find(p => p.id === id);
+    const item = cart[id];
+    if (!product || !item) return;
+
+    let unitPrice = product.preco;
+
+    if (product.variantes && product.variantes.length > 0) {
+      const matchingVariants = product.variantes.filter(v => v.quantidade <= item.quantity);
+      if (matchingVariants.length > 0) {
+        const bestVariant = matchingVariants[matchingVariants.length - 1];
+        unitPrice = bestVariant.preco / bestVariant.quantidade;
+      }
+    }
+
+    item.preco = unitPrice;
+  }
+
   window.addToCart = function(id, qty = 1, unitPrice = null) {
     const product = PRODUCTS.find(p => p.id === id);
     if (!product) return;
@@ -1678,6 +1696,7 @@
       cart[id] = { quantity: qty, preco: unitPrice !== null ? unitPrice : product.preco };
     }
 
+    recalculateCartItemPrice(id);
     saveCart();
     updateCartUI();
     showToast(`+${qty} ${product.name.toLowerCase()}`);
@@ -1689,7 +1708,11 @@
     } else {
       if (!cart[id]) return;
       cart[id].quantity += delta;
-      if (cart[id].quantity <= 0) delete cart[id];
+      if (cart[id].quantity <= 0) {
+        delete cart[id];
+      } else {
+        recalculateCartItemPrice(id);
+      }
     }
     saveCart();
     updateCartUI();
