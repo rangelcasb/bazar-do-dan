@@ -1770,6 +1770,7 @@
 
             window._pendingProductId = id;
             window._pendingVariant = null;
+            window._variantClicked = false;
 
             const modalTitle = document.getElementById('qtyModalTitle');
             const qtyControls = document.querySelector('.qty-controls');
@@ -1811,6 +1812,7 @@
         function selectVariant(quantity, price, evt) {
             const product = products.find(p => p.id === window._pendingProductId);
             window._pendingVariant = { quantidade: quantity, preco: price };
+            window._variantClicked = true;
 
             // Atualizar UI
             document.querySelectorAll('.variant-btn').forEach(btn => btn.classList.remove('active'));
@@ -1835,35 +1837,36 @@
 
         function confirmAddToCart() {
             const id = window._pendingProductId;
-            const qtyInput = parseInt(document.getElementById('qtyInput').value);
+            const qtyMultiplier = parseInt(document.getElementById('qtyInput').value);
             const product = products.find(p => p.id === id);
 
             if (!product) return;
 
-            let quantity = qtyInput;
+            let variantQuantity = qtyMultiplier;
             let unitPrice = product.preco;
 
-            // Se tem variante, calcular o preco unitario apropriado
+            // Se tem variante, usar preço da variante
             if (product.variantes && product.variantes.length > 0) {
-                let selectedVariant = window._pendingVariant;
+                let selectedVariant = window._pendingVariant || product.variantes[0];
 
-                // Se nao tem variante selecionada ou a quantidade mudou
-                // buscar variante mais apropriada para a quantidade digitada
-                if (!selectedVariant || qtyInput !== selectedVariant.quantidade) {
-                    // Buscar a maior variante que seja <= quantidade digitada
-                    const matchingVariants = product.variantes.filter(v => v.quantidade <= qtyInput);
+                // Se usuario CLICOU em um botão de variante
+                // multiplicar pela quantidade digitada
+                if (window._variantClicked) {
+                    variantQuantity = selectedVariant.quantidade * qtyMultiplier;
+                    unitPrice = selectedVariant.preco / selectedVariant.quantidade;
+                } else {
+                    // Se usuario apenas digitou (sem clicar em botao)
+                    // buscar variante apropriada para essa quantidade
+                    const matchingVariants = product.variantes.filter(v => v.quantidade <= qtyMultiplier);
                     if (matchingVariants.length > 0) {
                         selectedVariant = matchingVariants[matchingVariants.length - 1];
-                    } else {
-                        // Se quantidade < menor variante, usar a menor
-                        selectedVariant = product.variantes[0];
                     }
+                    variantQuantity = qtyMultiplier;
+                    unitPrice = selectedVariant.preco / selectedVariant.quantidade;
                 }
-
-                unitPrice = selectedVariant.preco / selectedVariant.quantidade;
             }
 
-            addToCart(id, quantity, unitPrice);
+            addToCart(id, variantQuantity, unitPrice);
             closeQuantityModal();
         }
 
