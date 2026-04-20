@@ -1390,7 +1390,13 @@
   const CATEGORIES = ['Todos', 'Estalos', 'Bombas', 'Traques', 'Chuvinhas', 'Especiais'];
   let currentCategory = 'Todos';
   let currentSearch = '';
-  let cart = JSON.parse(localStorage.getItem('bazarDodan_cart') || '{}');
+  let cart = (() => {
+    const stored = localStorage.getItem('bazarDodan_cart');
+    const parsed = stored ? JSON.parse(stored) : {};
+    if (Array.isArray(parsed)) return {};
+    if (typeof parsed !== 'object' || parsed === null) return {};
+    return parsed;
+  })();
   let window_pendingProductId = null;
   let window_pendingVariant = null;
   let window_variantClicked = false;
@@ -1487,10 +1493,16 @@
   }
 
   function saveCart() { localStorage.setItem('bazarDodan_cart', JSON.stringify(cart)); }
-  function cartCount() { return Object.values(cart).reduce((a, b) => a + b.quantity, 0); }
+  function cartCount() {
+    return Object.values(cart).reduce((a, b) => {
+      if (!b || typeof b !== 'object') return a;
+      return a + (b.quantity || 0);
+    }, 0);
+  }
   function cartTotal() {
     return Object.values(cart).reduce((sum, item) => {
-      return sum + (item.preco * item.quantity);
+      if (!item || typeof item !== 'object') return sum;
+      return sum + ((item.preco || 0) * (item.quantity || 0));
     }, 0);
   }
 
@@ -1624,12 +1636,7 @@
     const qtyMultiplier = parseInt(document.getElementById('qtyInput').value) || 1;
     const product = PRODUCTS.find(p => p.id === id);
 
-    console.log('confirmAddToCart called with id:', id, 'qty:', qtyMultiplier, 'product:', product);
-
-    if (!product) {
-      console.error('Product not found for id:', id);
-      return;
-    }
+    if (!product) return;
 
     let variantQuantity = qtyMultiplier;
     let unitPrice = product.preco;
@@ -1663,22 +1670,14 @@
 
   window.addToCart = function(id, qty = 1, unitPrice = null) {
     const product = PRODUCTS.find(p => p.id === id);
-    if (!product) {
-      console.error('addToCart: product not found', id);
-      return;
-    }
-
-    console.log('addToCart:', { id, qty, unitPrice, productName: product.name });
+    if (!product) return;
 
     if (cart[id]) {
       cart[id].quantity += qty;
-      console.log('Updated existing cart item:', cart[id]);
     } else {
       cart[id] = { quantity: qty, preco: unitPrice !== null ? unitPrice : product.preco };
-      console.log('Added new cart item:', cart[id]);
     }
 
-    console.log('Current cart:', cart);
     saveCart();
     updateCartUI();
     showToast(`+${qty} ${product.name.toLowerCase()}`);
