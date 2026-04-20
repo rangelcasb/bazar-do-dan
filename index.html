@@ -1835,21 +1835,35 @@
 
         function confirmAddToCart() {
             const id = window._pendingProductId;
-            const qtyMultiplier = parseInt(document.getElementById('qtyInput').value);
+            const qtyInput = parseInt(document.getElementById('qtyInput').value);
             const product = products.find(p => p.id === id);
 
             if (!product) return;
 
-            let variantQuantity = qtyMultiplier;
+            let quantity = qtyInput;
             let unitPrice = product.preco;
 
-            // Se tem variante selecionada, usar quantidade e preço da variante
-            if (window._pendingVariant) {
-                variantQuantity = window._pendingVariant.quantidade * qtyMultiplier;
-                unitPrice = window._pendingVariant.preco / window._pendingVariant.quantidade;
+            // Se tem variante, calcular o preco unitario apropriado
+            if (product.variantes && product.variantes.length > 0) {
+                let selectedVariant = window._pendingVariant;
+
+                // Se nao tem variante selecionada ou a quantidade mudou
+                // buscar variante mais apropriada para a quantidade digitada
+                if (!selectedVariant || qtyInput !== selectedVariant.quantidade) {
+                    // Buscar a maior variante que seja <= quantidade digitada
+                    const matchingVariants = product.variantes.filter(v => v.quantidade <= qtyInput);
+                    if (matchingVariants.length > 0) {
+                        selectedVariant = matchingVariants[matchingVariants.length - 1];
+                    } else {
+                        // Se quantidade < menor variante, usar a menor
+                        selectedVariant = product.variantes[0];
+                    }
+                }
+
+                unitPrice = selectedVariant.preco / selectedVariant.quantidade;
             }
 
-            addToCart(id, variantQuantity, unitPrice);
+            addToCart(id, quantity, unitPrice);
             closeQuantityModal();
         }
 
