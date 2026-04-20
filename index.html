@@ -385,14 +385,14 @@
             margin-bottom: 80px;
         }
 
-        /* Responsividade do grid - Telas maiores sem sidebar (mobile) */
-        @media (max-width: 1400px) and (max-width: 768px) {
+        /* Responsividade do grid - Telas intermediárias com sidebar */
+        @media (min-width: 769px) and (max-width: 1400px) {
             .products-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
 
-        @media (max-width: 1024px) and (max-width: 768px) {
+        @media (min-width: 769px) and (max-width: 1024px) {
             .products-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -1308,25 +1308,25 @@
         <div class="sidebar" id="sidebar">
             <div class="sidebar-title">Categorias</div>
             <div class="category-list">
-                <button class="category-item active" onclick="filterByCategory('')">
+                <button class="category-item active" onclick="filterByCategory('', event)">
                     ✓ Todas
                 </button>
-                <button class="category-item" onclick="filterByCategory('Estalos')">
+                <button class="category-item" onclick="filterByCategory('Estalos', event)">
                     Estalos
                 </button>
-                <button class="category-item" onclick="filterByCategory('Bombas')">
+                <button class="category-item" onclick="filterByCategory('Bombas', event)">
                     Bombas
                 </button>
-                <button class="category-item" onclick="filterByCategory('Traques')">
+                <button class="category-item" onclick="filterByCategory('Traques', event)">
                     Traques
                 </button>
-                <button class="category-item" onclick="filterByCategory('Chuvinhas')">
+                <button class="category-item" onclick="filterByCategory('Chuvinhas', event)">
                     Chuvinhas
                 </button>
-                <button class="category-item" onclick="filterByCategory('Aviões')">
+                <button class="category-item" onclick="filterByCategory('Aviões', event)">
                     Aviões
                 </button>
-                <button class="category-item" onclick="filterByCategory('Especiais')">
+                <button class="category-item" onclick="filterByCategory('Especiais', event)">
                     Especiais
                 </button>
             </div>
@@ -1384,7 +1384,7 @@
 
     <div id="whatsappMenu" class="whatsapp-menu">
         <div class="whatsapp-menu-item" onclick="shareFullCatalog()">📚 Catálogo Completo</div>
-        <div class="whatsappMenu-item" onclick="shareProductList()">🛒 Enviar Lista</div>
+        <div class="whatsapp-menu-item" onclick="shareProductList()">🛒 Enviar Lista</div>
         <div class="whatsapp-menu-item" onclick="openDirectChat()">💬 Chat Direto</div>
     </div>
 
@@ -1589,21 +1589,6 @@
 
         let cart = [];
         const whatsappNumber = "5582999453211";
-        const VARIANT_QUANTITIES = [1, 5, 10, 25, 50, 100];
-
-        // Encontrar preço correto para uma quantidade de variantes
-        function getPriceForVariant(product, quantity) {
-            if (!product.variantes || product.variantes.length === 0) {
-                return { quantidade: quantity, preco: product.preco, unidades: `${quantity} unidades` };
-            }
-
-            // Encontrar a variante que corresponde à quantidade
-            const matching = product.variantes.find(v => v.quantidade === quantity);
-            if (matching) return matching;
-
-            // Se não houver correspondência exata, retornar a primeira variante ou preço original
-            return product.variantes[0] || { quantidade: quantity, preco: product.preco, unidades: `${quantity} unidades` };
-        }
 
         // Normalização de nomes para matching
         function normalizeName(str) {
@@ -1662,7 +1647,11 @@
 
         function loadCart() {
             const saved = localStorage.getItem('bazarDodan_cart');
-            cart = saved ? JSON.parse(saved) : [];
+            try {
+                cart = saved ? JSON.parse(saved) : [];
+            } catch (e) {
+                cart = [];
+            }
         }
 
         function renderProducts(filtered = products) {
@@ -1790,14 +1779,16 @@
 
             // Se produto tem variantes, mostrar seletor de variantes
             if (product.variantes && product.variantes.length > 0) {
-                // Limpar e criar HTML para variantes
-                let variantHTML = '<div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">';
+                // Remover container anterior se existir (evita acúmulo no DOM)
+                document.getElementById('variantContainer')?.remove();
+
+                let variantHTML = '<div id="variantContainer" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">';
                 variantHTML += '<label style="font-size: 14px; color: #aaa; font-weight: 600;">Selecione a quantidade:</label>';
                 variantHTML += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">';
 
                 product.variantes.forEach((variant, idx) => {
                     const isFirst = idx === 0;
-                    variantHTML += `<button class="variant-btn ${isFirst ? 'active' : ''}" data-qty="${variant.quantidade}" data-price="${variant.preco}" onclick="selectVariant(${variant.quantidade}, ${variant.preco})">
+                    variantHTML += `<button class="variant-btn ${isFirst ? 'active' : ''}" data-qty="${variant.quantidade}" data-price="${variant.preco}" onclick="selectVariant(${variant.quantidade}, ${variant.preco}, event)">
                         <div style="font-weight: 600;">${variant.quantidade} un</div>
                         <div style="font-size: 12px; color: #aaa;">R$ ${variant.preco.toFixed(2)}</div>
                     </button>`;
@@ -1817,13 +1808,14 @@
             document.getElementById('quantityModal').style.display = 'flex';
         }
 
-        function selectVariant(quantity, price) {
+        function selectVariant(quantity, price, evt) {
             const product = products.find(p => p.id === window._pendingProductId);
             window._pendingVariant = { quantidade: quantity, preco: price };
 
             // Atualizar UI
             document.querySelectorAll('.variant-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.closest('.variant-btn').classList.add('active');
+            const btn = evt && evt.target ? evt.target.closest('.variant-btn') : null;
+            if (btn) btn.classList.add('active');
 
             // Atualizar o input com a quantidade da variante
             document.getElementById('qtyInput').value = '1';
@@ -1837,11 +1829,7 @@
         }
 
         function closeQuantityModal() {
-            // Remover botões de variante adicionados dinamicamente
-            const variantContainer = document.querySelector('.qty-controls')?.previousElementSibling;
-            if (variantContainer && variantContainer.style.display === 'flex') {
-                variantContainer.remove();
-            }
+            document.getElementById('variantContainer')?.remove();
             document.getElementById('quantityModal').style.display = 'none';
         }
 
@@ -1858,18 +1846,11 @@
             // Se tem variante selecionada, usar quantidade e preço da variante
             if (window._pendingVariant) {
                 variantQuantity = window._pendingVariant.quantidade * qtyMultiplier;
-                unitPrice = window._pendingVariant.preco;
+                unitPrice = window._pendingVariant.preco / window._pendingVariant.quantidade;
             }
 
             addToCart(id, variantQuantity, unitPrice);
             closeQuantityModal();
-
-            // Limpar elementos de variante adicionados ao DOM
-            document.querySelectorAll('[style*="display: flex"][style*="flex-direction: column"]').forEach(el => {
-                if (el.textContent.includes('Selecione a quantidade')) {
-                    el.remove();
-                }
-            });
         }
 
         function shareWhatsApp(name, price) {
@@ -1879,6 +1860,7 @@
 
         function sendAdvancedWhatsApp() {
             const product = window.currentProduct;
+            if (!product) return;
             const customerPhone = document.getElementById('customerPhone').value.trim();
             const customMessage = document.getElementById('customMessage').value.trim();
 
@@ -1902,6 +1884,7 @@
         }
 
         function shareProductList() {
+            document.getElementById('whatsappMenu').style.display = 'none';
             if (cart.length === 0) {
                 alert('Seu carrinho está vazio!');
                 return;
@@ -1925,6 +1908,7 @@
         }
 
         function shareFullCatalog() {
+            document.getElementById('whatsappMenu').style.display = 'none';
             let message = `📚 *CATÁLOGO COMPLETO - Bazar do Dan*\n\n`;
 
             const categories = ['Estalos', 'Bombas', 'Traques', 'Chuvinhas', 'Aviões', 'Especiais'];
@@ -1947,6 +1931,7 @@
         }
 
         function openDirectChat() {
+            document.getElementById('whatsappMenu').style.display = 'none';
             const greeting = `Olá! Gostaria de informações sobre os produtos do Bazar do Dan 👋`;
             const encoded = encodeURIComponent(greeting);
             window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, '_blank');
@@ -2086,13 +2071,13 @@
             overlay.classList.remove('show');
         }
 
-        function filterByCategory(category) {
+        function filterByCategory(category, evt) {
             const categoryItems = document.querySelectorAll('.category-item');
             categoryItems.forEach(item => {
                 item.classList.remove('active');
             });
 
-            event.target.classList.add('active');
+            if (evt && evt.target) evt.target.classList.add('active');
 
             document.getElementById('categoryFilter').value = category;
             filterProducts();
