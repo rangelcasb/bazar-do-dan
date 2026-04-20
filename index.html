@@ -1387,7 +1387,7 @@
     { id: 63, name: "Base de Míssil", unidades: "1 unidade", preco: 15.00, categoria: "Especiais", img: "images/063-base-missil.jpg", tagline: "", variantes: [] }
   ];
 
-  const CATEGORIES = ['Todos', 'Estalos', 'Bombas', 'Traques', 'Chuvinhas', 'Aviões', 'Especiais'];
+  const CATEGORIES = ['Todos', 'Estalos', 'Bombas', 'Traques', 'Chuvinhas', 'Especiais'];
   let currentCategory = 'Todos';
   let currentSearch = '';
   let cart = JSON.parse(localStorage.getItem('bazarDodan_cart') || '{}');
@@ -1624,7 +1624,12 @@
     const qtyMultiplier = parseInt(document.getElementById('qtyInput').value) || 1;
     const product = PRODUCTS.find(p => p.id === id);
 
-    if (!product) return;
+    console.log('confirmAddToCart called with id:', id, 'qty:', qtyMultiplier, 'product:', product);
+
+    if (!product) {
+      console.error('Product not found for id:', id);
+      return;
+    }
 
     let variantQuantity = qtyMultiplier;
     let unitPrice = product.preco;
@@ -1658,14 +1663,22 @@
 
   window.addToCart = function(id, qty = 1, unitPrice = null) {
     const product = PRODUCTS.find(p => p.id === id);
-    if (!product) return;
+    if (!product) {
+      console.error('addToCart: product not found', id);
+      return;
+    }
+
+    console.log('addToCart:', { id, qty, unitPrice, productName: product.name });
 
     if (cart[id]) {
       cart[id].quantity += qty;
+      console.log('Updated existing cart item:', cart[id]);
     } else {
       cart[id] = { quantity: qty, preco: unitPrice !== null ? unitPrice : product.preco };
+      console.log('Added new cart item:', cart[id]);
     }
 
+    console.log('Current cart:', cart);
     saveCart();
     updateCartUI();
     showToast(`+${qty} ${product.name.toLowerCase()}`);
