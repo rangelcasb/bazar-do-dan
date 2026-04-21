@@ -15,19 +15,19 @@
 <meta property="og:site_name" content="Bazar do Dan">
 <meta property="og:title" content="Bazar do Dan · Fogos de São João · Maceió">
 <meta property="og:description" content="Do estalinho da criançada ao vulcão que vira a noite. Catálogo completo de fogos com preços diretos. Peça pelo WhatsApp — sem pedido mínimo.">
-<meta property="og:image" content="https://rangelcasb.github.io/bazar-do-dan/og-image.png">
+<meta property="og:image" content="https://rangelcasb.github.io/bazar_do_dan/og-image.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Bazar do Dan - Fogos de São João em Maceió">
-<meta property="og:url" content="https://rangelcasb.github.io/bazar-do-dan/">
+<meta property="og:url" content="https://rangelcasb.github.io/bazar_do_dan/">
 <meta property="og:locale" content="pt_BR">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Bazar do Dan · Fogos de São João · Maceió">
 <meta name="twitter:description" content="Do estalinho da criançada ao vulcão que vira a noite. Peça pelo WhatsApp.">
-<meta name="twitter:image" content="https://rangelcasb.github.io/bazar-do-dan/og-image.png">
+<meta name="twitter:image" content="https://rangelcasb.github.io/bazar_do_dan/og-image.png">
 
 <!-- Cor do tema mobile -->
 <meta name="theme-color" content="#f2e9d6">
@@ -226,6 +226,13 @@
   @keyframes pulse {
     0%,100% { transform: scale(1); }
     50% { transform: scale(1.08); }
+  }
+  .cart-total-header {
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0.85;
+    border-left: 1px solid rgba(255,255,255,0.25);
+    padding-left: 10px;
   }
   .cart-count {
     background: var(--highlight);
@@ -1222,6 +1229,7 @@
       <span>🛒</span>
       <span class="lbl">Carrinho</span>
       <span class="cart-count" id="cartCount">0</span>
+      <span class="cart-total-header" id="cartTotalHeader" style="display:none"></span>
     </button>
   </div>
 </header>
@@ -1348,7 +1356,7 @@
   <span id="toastText">Adicionado!</span>
 </div>
 
-<div class="modal" id="quantityModal">
+<div class="modal" id="quantityModal" onclick="if(event.target===this)closeQuantityModal()">
   <div class="modal-content">
     <div class="modal-title" id="qtyModalTitle">Produto</div>
     <div id="variantContainer" style="display:none;margin-bottom:16px;">
@@ -1666,7 +1674,15 @@
 
   function updateCartUI() {
     const n = cartCount();
+    const total = cartTotal();
     document.getElementById('cartCount').textContent = n;
+    const totalEl = document.getElementById('cartTotalHeader');
+    if (n > 0) {
+      totalEl.textContent = fmt(total);
+      totalEl.style.display = '';
+    } else {
+      totalEl.style.display = 'none';
+    }
     const btn = document.getElementById('cartOpen');
     btn.classList.remove('pulse');
     void btn.offsetWidth;
