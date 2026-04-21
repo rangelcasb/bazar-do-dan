@@ -101,9 +101,11 @@
   .header {
     position: sticky;
     top: 0;
-    z-index: 90;
+    z-index: 999;
     background: var(--bg);
     border-bottom: 1.5px solid var(--border);
+    display: block;
+    width: 100%;
   }
   .header-inner {
     max-width: 1400px;
@@ -112,6 +114,7 @@
     display: flex;
     align-items: center;
     gap: 24px;
+    min-height: 70px;
   }
   .brand {
     display: flex;
