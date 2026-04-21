@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="dots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.5" fill="#2a1708" opacity="0.12"/>
+    </pattern>
+  </defs>
+
+  <!-- Fundo kraft -->
+  <rect width="1200" height="630" fill="#f2e9d6"/>
+  <!-- Textura de pontos -->
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- Bandeirinhas decorativas no topo -->
+  <rect x="0" y="0" width="1200" height="8" fill="#b73b2c"/>
+
+  <!-- Faixa decorativa inferior -->
+  <rect x="0" y="622" width="1200" height="8" fill="#b73b2c"/>
+
+  <!-- Bandeirinhas triangulares no topo -->
+  <polygon points="60,8 120,8 90,60" fill="#c9352e"/>
+  <polygon points="120,8 180,8 150,60" fill="#f0b932"/>
+  <polygon points="180,8 240,8 210,60" fill="#234a90"/>
+  <polygon points="240,8 300,8 270,60" fill="#0a462d"/>
+  <polygon points="300,8 360,8 330,60" fill="#c9352e"/>
+  <polygon points="360,8 420,8 390,60" fill="#f0b932"/>
+  <polygon points="420,8 480,8 450,60" fill="#234a90"/>
+  <polygon points="480,8 540,8 510,60" fill="#0a462d"/>
+  <polygon points="540,8 600,8 570,60" fill="#c9352e"/>
+  <polygon points="600,8 660,8 630,60" fill="#f0b932"/>
+  <polygon points="660,8 720,8 690,60" fill="#234a90"/>
+  <polygon points="720,8 780,8 750,60" fill="#0a462d"/>
+  <polygon points="780,8 840,8 810,60" fill="#c9352e"/>
+  <polygon points="840,8 900,8 870,60" fill="#f0b932"/>
+  <polygon points="900,8 960,8 930,60" fill="#234a90"/>
+  <polygon points="960,8 1020,8 990,60" fill="#0a462d"/>
+  <polygon points="1020,8 1080,8 1050,60" fill="#c9352e"/>
+  <polygon points="1080,8 1140,8 1110,60" fill="#f0b932"/>
+
+  <!-- Logo círculo -->
+  <circle cx="600" cy="260" r="110" fill="#1f140d"/>
+
+  <!-- Letra D dentro do círculo -->
+  <text
+    x="600" y="305"
+    font-family="Georgia, serif"
+    font-size="120"
+    font-weight="800"
+    font-style="italic"
+    text-anchor="middle"
+    fill="#f2e9d6"
+    letter-spacing="-4"
+  >d</text>
+
+  <!-- Nome do Bazar -->
+  <text
+    x="600" y="420"
+    font-family="Georgia, serif"
+    font-size="64"
+    font-weight="700"
+    text-anchor="middle"
+    fill="#1f140d"
+    letter-spacing="-1"
+  >Bazar do Dan</text>
+
+  <!-- Linha decorativa -->
+  <rect x="480" y="438" width="240" height="2.5" fill="#b73b2c" rx="2"/>
+
+  <!-- Descrição -->
+  <text
+    x="600" y="488"
+    font-family="Arial, sans-serif"
+    font-size="26"
+    text-anchor="middle"
+    fill="#6b4a2a"
+    letter-spacing="0.5"
+  >Fogos de São João · Maceió, AL</text>
+
+  <!-- Sub descrição -->
+  <text
+    x="600" y="528"
+    font-family="Arial, sans-serif"
+    font-size="20"
+    text-anchor="middle"
+    fill="#8a6a42"
+  >Peça pelo WhatsApp · Entrega combinada</text>
+</svg>
